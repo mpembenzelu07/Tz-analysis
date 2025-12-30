@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | FootIntel Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== GLOBAL STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary-blue: #1E3A8A;
+            --secondary-blue: #3B82F6;
+            --football-green: #059669;
+            --accent-red: #DC2626;
+            --light-bg: #F9FAFB;
+            --dark-text: #111827;
+            --medium-gray: #6B7280;
+            --light-gray: #E5E7EB;
+            --white: #FFFFFF;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--football-green);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-text);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        .nav-links a.active {
+            color: var(--football-green);
+            font-weight: 600;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        /* ===== ABOUT PAGE ===== */
+        .about-container {
+            margin-top: 100px;
+            padding: 2rem 0;
+        }
+
+        /* Hero Section */
+        .about-hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(135deg, #f0f9ff 0%, #dcfce7 100%);
+            border-radius: 20px;
+            margin-bottom: 4rem;
+        }
+
+        .about-hero h1 {
+            font-size: 3.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        .about-hero p {
+            font-size: 1.2rem;
+            color: var(--medium-gray);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Mission Section */
+        .mission-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        .mission-content h2 {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        .mission-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem;
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+        }
+
+        .mission-visual {
+            text-align: center;
+        }
+
+        .visual-icon {
+            font-size: 8rem;
+            color: var(--football-green);
+            opacity: 0.8;
+        }
+
+        /* Story Section */
+        .story-section {
+            background-color: var(--white);
+            border-radius: 20px;
+            padding: 4rem;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        .story-section h2 {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .story-timeline {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline-item {
+            margin-bottom: 3rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            background-color: var(--football-green);
+            border-radius: 50%;
+        }
+
+        .timeline-year {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content h3 {
+            color: var(--dark-text);
+            margin-bottom: 0.8rem;
+        }
+
+        .timeline-content p {
+            color: var(--medium-gray);
+        }
+
+        /* Team Section */
+        .team-section {
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            color: var(--medium-gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .team-member {
+            background-color: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px);
+        }
+
+        .member-image {
+            height: 250px;
+            background-color: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--medium-gray);
+        }
+
+        .member-info {
+            padding: 1.5rem;
+        }
+
+        .member-info h3 {
+            color: var(--primary-blue);
+            margin-bottom: 0.3rem;
+        }
+
+        .member-role {
+            color: var(--football-green);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .member-bio {
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .member-social {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .social-link {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: var(--light-bg);
+            color: var(--medium-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-link:hover {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        /* Values Section */
+        .values-section {
+            margin-bottom: 4rem;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .value-card {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .value-icon {
+            width: 70px;
+            height: 70px;
+            background-color: var(--light-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: var(--football-green);
+            font-size: 1.8rem;
+        }
+
+        .value-card h3 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        .value-card p {
+            color: var(--medium-gray);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 4rem;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            border-radius: 20px;
+            margin-bottom: 4rem;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 3rem 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #d1d5db;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .mission-section {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .story-section {
+                padding: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .about-hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .mission-content h2,
+            .story-section h2,
+            .section-title h2,
+            .cta-section h2 {
+                font-size: 2rem;
+            }
+            
+            .mission-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .story-section {
+                padding: 2rem;
+            }
+            
+            .cta-section {
+                padding: 3rem 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .about-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .mission-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline-item {
+                padding-left: 1.5rem;
+            }
+            
+            .team-grid,
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <i class="fas fa-futbol"></i>
+                    FootIntel Pro
+                </a>
+                
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="features.html">Features</a></li>
+                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="about.html" class="active">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="login.html">Login</a></li>
+                </ul>
+                
+                <div class="user-menu">
+                    <a href="signup.html" class="btn btn-primary">Get Started</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- About Content -->
+    <div class="container about-container">
+        <!-- Hero Section -->
+        <div class="about-hero">
+            <h1>Revolutionizing Football Intelligence</h1>
+            <p>We're on a mission to democratize professional football analysis, making world-class tactical insights accessible to teams at every level.</p>
+            <a href="signup.html" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                Start Your Free Trial
+            </a>
+        </div>
+
+        <!-- Mission Section -->
+        <div class="mission-section">
+            <div class="mission-content">
+                <h2>Our Mission</h2>
+                <p style="color: var(--medium-gray); margin-bottom: 1.5rem; font-size: 1.1rem;">
+                    To empower football coaches, analysts, and teams with AI-powered insights that transform raw data into winning strategies. We believe every team deserves access to professional-level analysis, regardless of budget or resources.
+                </p>
+                <p style="color: var(--medium-gray); font-size: 1.1rem;">
+                    By combining cutting-edge machine learning with deep football expertise, we're creating tools that were once only available to elite clubs, making them accessible to youth academies, semi-pro teams, and ambitious coaches worldwide.
+                </p>
+                
+                <div class="mission-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">500+</div>
+                        <div class="stat-label">Teams Analyzed</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">94%</div>
+                        <div class="stat-label">Accuracy Rate</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">42</div>
+                        <div class="stat-label">Countries</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mission-visual">
+                <div class="visual-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div style="margin-top: 2rem;">
+                    <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">Three-Brain System</h3>
+                    <p style="color: var(--medium-gray);">
+                        Our unique approach combines data ingestion, AI analysis, and coach-friendly reporting into one seamless platform.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Story Section -->
+        <div class="story-section">
+            <h2>Our Journey</h2>
+            
+            <div class="story-timeline">
+                <div class="timeline-item">
+                    <div class="timeline-year">2019</div>
+                    <div class="timeline-content">
+                        <h3>The Beginning</h3>
+                        <p>Founded by former professional analysts who saw the gap between elite and grassroots football technology. Started as a research project at Stanford University.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-year">2020</div>
+                    <div class="timeline-content">
+                        <h3>First Prototype</h3>
+                        <p>Developed our first MVP with 5 beta teams. Learned that coaches needed simpler interfaces and more actionable insights, not just raw data.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-year">2021</div>
+                    <div class="timeline-content">
+                        <h3>Seed Funding</h3>
+                        <p>Raised $2M in seed funding to expand the team and develop our proprietary AI algorithms for tactical pattern recognition.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-year">2022</div>
+                    <div class="timeline-content">
+                        <h3>Public Launch</h3>
+                        <p>Launched FootIntel Pro to the public. Onboarded our first 100 paying customers, including youth academies and semi-professional clubs.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-year">2023</div>
+                    <div class="timeline-content">
+                        <h3>Global Expansion</h3>
+                        <p>Expanded to 42 countries. Partnered with football associations in Africa and South America to adapt our platform for developing football markets.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-year">2024</div>
+                    <div class="timeline-content">
+                        <h3>Today & Beyond</h3>
+                        <p>Serving 500+ teams worldwide. Continuously improving our AI models and adding new features based on coach feedback and football innovation.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Section -->
+        <div class="team-section">
+            <div class="section-title">
+                <h2>Meet Our Leadership</h2>
+                <p>The passionate team behind FootIntel Pro</p>
+            </div>
+            
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-image">
+                        <i class="fas fa-user-tie" style="font-size: 4rem;"></i>
+                    </div>
+                    <div class="member-info">
+                        <h3>Michael Rodriguez</h3>
+                        <div class="member-role">CEO & Co-founder</div>
+                        <div class="member-bio">
+                            Former head of analytics at a Premier League club. 15+ years in football data science.
+                        </div>
+                        <div class="member-social">
+                            <a href="#" class="social-link">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="#" class="social-link">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-member">
+                    <div class="member-image">
+                        <i class="fas fa-user-tie" style="font-size: 4rem;"></i>
+                    </div>
+                    <div class="member-info">
+                        <h3>Sarah Johnson</h3>
+                        <div class="member-role">CTO & Co-founder</div>
+                        <div class="member-bio">
+                            Ex-Google AI researcher. PhD in Computer Vision from MIT. Football analytics enthusiast.
+                        </div>
+                        <div class="member-social">
+                            <a href="#" class="social-link">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="#" class="social-link">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-member">
+                    <div class="member-image">
+                        <i class="fas fa-user-tie" style="font-size: 4rem;"></i>
+                    </div>
+                    <div class="member-info">
+                        <h3>David Chen</h3>
+                        <div class="member-role">Head of Product</div>
+                        <div class="member-bio">
+                            Former product manager at SportsTech Inc. Focused on user experience and coach workflows.
+                        </div>
+                        <div class="member-social">
+                            <a href="#" class="social-link">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Values Section -->
+        <div class="values-section">
+            <div class="section-title">
+                <h2>Our Core Values</h2>
+                <p>The principles that guide everything we do</p>
+            </div>
+            
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h3>Accessibility</h3>
+                    <p>Making professional analysis tools available to teams at all levels, not just elite clubs with massive budgets.</p>
+                </div>
+                
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>Innovation</h3>
+                    <p>Continuously pushing the boundaries of what's possible in football analytics through AI and machine learning.</p>
+                </div>
+                
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3>Partnership</h3>
+                    <p>Working closely with coaches to build tools that solve real problems and fit into actual workflows.</p>
+                </div>
+                
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Integrity</h3>
+                    <p>Being transparent about our methods and limitations. No black-box solutions or overpromising.</p>
+                </div>
+                
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3>Global Mindset</h3>
+                    <p>Designing for football's diversity - different playing styles, resources, and cultural contexts worldwide.</p>
+                </div>
+                
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Education</h3>
+                    <p>Helping coaches understand analytics, not just providing numbers. Building football intelligence.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <h2>Join the Football Intelligence Revolution</h2>
+            <p>Whether you're coaching a youth academy, managing a semi-pro team, or analyzing opponents at any level, FootIntel Pro gives you the insights you need to win.</p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="signup.html" class="btn" style="background-color: white; color: var(--primary-blue);">
+                    Start Free Trial
+                </a>
+                <a href="contact.html" class="btn" style="background-color: transparent; border: 2px solid white;">
+                    Schedule a Demo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>FootIntel Pro</h3>
+                    <p>Professional football intelligence platform that turns match data into winning strategies.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Product</h3>
+                    <ul class="footer-links">
+                        <li><a href="features.html">Features</a></li>
+                        <li><a href="pricing.html">Pricing</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="#">Roadmap</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="help.html">Help Center</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Case Studies</a></li>
+                        <li><a href="#">Webinars</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Partners</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2024 FootIntel Pro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add subtle animations to stats
+            const statNumbers = document.querySelectorAll('.stat-number');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const stat = entry.target;
+                        const target = parseInt(stat.textContent);
+                        let current = 0;
+                        const increment = target / 50;
+                        const timer = setInterval(() => {
+                            current += increment;
+                            if (current >= target) {
+                                stat.textContent = target + (stat.textContent.includes('%') ? '%' : '+');
+                                clearInterval(timer);
+                            } else {
+                                stat.textContent = Math.floor(current) + (stat.textContent.includes('%') ? '%' : '+');
+                            }
+                        }, 30);
+                        observer.unobserve(stat);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            statNumbers.forEach(stat => observer.observe(stat));
+            
+            // Add hover effects to team members
+            const teamMembers = document.querySelectorAll('.team-member');
+            teamMembers.forEach(member => {
+                member.addEventListener('mouseenter', function() {
+                    this.style.boxShadow = '0 20px 40px rgba(0,0,0,0.1)';
+                });
+                
+                member.addEventListener('mouseleave', function() {
+                    this.style.boxShadow = '0 4px 6px rgba(0,0,0,0.05)';
+                });
+            });
+            
+            // Add click animation to CTA buttons
+            const ctaButtons = document.querySelectorAll('.cta-section .btn');
+            ctaButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 150);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
