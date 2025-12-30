@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | FootIntel Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== GLOBAL STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary-blue: #1E3A8A;
+            --secondary-blue: #3B82F6;
+            --football-green: #059669;
+            --accent-red: #DC2626;
+            --light-bg: #F9FAFB;
+            --dark-text: #111827;
+            --medium-gray: #6B7280;
+            --light-gray: #E5E7EB;
+            --white: #FFFFFF;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--football-green);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-text);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        .nav-links a.active {
+            color: var(--football-green);
+            font-weight: 600;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        .btn-green {
+            background-color: var(--football-green);
+            color: white;
+        }
+
+        .btn-green:hover {
+            background-color: #047857;
+        }
+
+        /* ===== SETTINGS PAGE ===== */
+        .settings-container {
+            margin-top: 100px;
+            padding: 2rem 0;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+        }
+
+        .page-subtitle {
+            color: var(--medium-gray);
+            margin-top: 0.5rem;
+        }
+
+        /* ===== SETTINGS LAYOUT ===== */
+        .settings-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
+
+        /* Settings Sidebar */
+        .settings-sidebar {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+        }
+
+        .sidebar-links {
+            list-style: none;
+        }
+
+        .sidebar-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-links a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0.8rem 1rem;
+            text-decoration: none;
+            color: var(--dark-text);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .sidebar-links a:hover {
+            background-color: var(--light-bg);
+        }
+
+        .sidebar-links a.active {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        .sidebar-links a.active i {
+            color: white;
+        }
+
+        .sidebar-links i {
+            color: var(--medium-gray);
+            width: 20px;
+        }
+
+        /* Settings Content */
+        .settings-content {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .settings-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .settings-section.active {
+            display: block;
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .section-header h2 {
+            color: var(--primary-blue);
+            font-size: 1.8rem;
+        }
+
+        .section-header p {
+            color: var(--medium-gray);
+            margin-top: 0.5rem;
+        }
+
+        /* ===== FORM STYLES ===== */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark-text);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-control.error {
+            border-color: var(--accent-red);
+        }
+
+        .error-message {
+            color: var(--accent-red);
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+            display: none;
+        }
+
+        .form-help {
+            font-size: 0.9rem;
+            color: var(--medium-gray);
+            margin-top: 0.5rem;
+        }
+
+        /* Profile Picture */
+        .profile-picture {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .avatar-container {
+            position: relative;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--primary-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .avatar-change {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 32px;
+            height: 32px;
+            background-color: var(--football-green);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 3px solid white;
+        }
+
+        /* Toggle Switch */
+        .toggle-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background-color: var(--light-bg);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .toggle-label {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .toggle-label span:first-child {
+            font-weight: 500;
+            margin-bottom: 0.2rem;
+        }
+
+        .toggle-label span:last-child {
+            font-size: 0.9rem;
+            color: var(--medium-gray);
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--medium-gray);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--football-green);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+
+        /* Team Members */
+        .team-members {
+            margin-top: 2rem;
+        }
+
+        .member-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .member-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background-color: var(--light-bg);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .member-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .member-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .member-role {
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+        }
+
+        .member-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Danger Zone */
+        .danger-zone {
+            margin-top: 3rem;
+            padding: 2rem;
+            background-color: #FEF2F2;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-red);
+        }
+
+        .danger-zone h3 {
+            color: var(--accent-red);
+            margin-bottom: 1rem;
+        }
+
+        .danger-zone p {
+            color: #92400E;
+            margin-bottom: 1.5rem;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #d1d5db;
+            text-decoration: none;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #d1d5db;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .settings-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .settings-sidebar {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-picture {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .toggle-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .settings-content {
+                padding: 1.5rem;
+            }
+            
+            .member-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .member-actions {
+                align-self: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <i class="fas fa-futbol"></i>
+                    FootIntel Pro
+                </a>
+                
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="upload.html">Analyze</a></li>
+                    <li><a href="database.html">Database</a></li>
+                    <li><a href="settings.html" class="active">Settings</a></li>
+                </ul>
+                
+                <div class="user-menu">
+                    <a href="dashboard.html" class="btn btn-primary">Back to Dashboard</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Settings Content -->
+    <div class="container settings-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Account Settings</h1>
+            <p class="page-subtitle">Manage your profile, team, and preferences</p>
+        </div>
+
+        <!-- Settings Layout -->
+        <div class="settings-layout">
+            <!-- Sidebar -->
+            <aside class="settings-sidebar">
+                <ul class="sidebar-links">
+                    <li>
+                        <a href="#profile" class="active" data-section="profile">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#team" data-section="team">
+                            <i class="fas fa-users"></i> Team
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#notifications" data-section="notifications">
+                            <i class="fas fa-bell"></i> Notifications
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#security" data-section="security">
+                            <i class="fas fa-shield-alt"></i> Security
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#billing" data-section="billing">
+                            <i class="fas fa-credit-card"></i> Billing
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#integrations" data-section="integrations">
+                            <i class="fas fa-plug"></i> Integrations
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#api" data-section="api">
+                            <i class="fas fa-code"></i> API
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="settings-content">
+                <!-- Profile Section -->
+                <div class="settings-section active" id="profile-section">
+                    <div class="section-header">
+                        <h2>Profile Information</h2>
+                        <p>Update your personal details and how others see you on the platform</p>
+                    </div>
+
+                    <form id="profileForm">
+                        <!-- Profile Picture -->
+                        <div class="profile-picture">
+                            <div class="avatar-container">
+                                <div class="avatar">JD</div>
+                                <div class="avatar-change" onclick="changeAvatar()">
+                                    <i class="fas fa-camera"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 style="color: var(--primary-blue);">John Doe</h3>
+                                <p style="color: var(--medium-gray);">Head Coach, FirstLight Academy</p>
+                                <button type="button" class="btn" style="margin-top: 0.5rem;" onclick="changeAvatar()">
+                                    Change Avatar
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Personal Information -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name *</label>
+                                <input type="text" id="firstName" class="form-control" value="John" required>
+                                <div class="error-message" id="firstNameError"></div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="lastName">Last Name *</label>
+                                <input type="text" id="lastName" class="form-control" value="Doe" required>
+                                <div class="error-message" id="lastNameError"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" class="form-control" value="john.doe@firstlightacademy.com" required>
+                            <div class="error-message" id="emailError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" class="form-control" value="+1 (555) 123-4567">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="position">Position/Role</label>
+                            <input type="text" id="position" class="form-control" value="Head Coach">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bio">Bio</label>
+                            <textarea id="bio" class="form-control" rows="4" placeholder="Tell us about yourself...">Experienced football coach specializing in youth development and tactical analysis. Currently leading FirstLight Academy's U19 team.</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">
+                                Save Changes
+                            </button>
+                            <button type="button" class="btn" onclick="resetProfileForm()">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Team Section -->
+                <div class="settings-section" id="team-section">
+                    <div class="section-header">
+                        <h2>Team Management</h2>
+                        <p>Manage your team information and members</p>
+                    </div>
+
+                    <form id="teamForm">
+                        <div class="form-group">
+                            <label for="teamName">Team/Organization Name *</label>
+                            <input type="text" id="teamName" class="form-control" value="FirstLight Academy" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="teamType">Team Type</label>
+                            <select id="teamType" class="form-control">
+                                <option value="youth" selected>Youth Academy</option>
+                                <option value="amateur">Amateur Club</option>
+                                <option value="semi-pro">Semi-Professional</option>
+                                <option value="professional">Professional</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="teamCountry">Country</label>
+                            <input type="text" id="teamCountry" class="form-control" value="United States">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="teamLeague">Primary League</label>
+                            <input type="text" id="teamLeague" class="form-control" value="US Youth Soccer">
+                        </div>
+
+                        <!-- Team Members -->
+                        <div class="team-members">
+                            <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">Team Members</h3>
+                            
+                            <ul class="member-list">
+                                <li class="member-item">
+                                    <div class="member-info">
+                                        <div class="member-avatar">JD</div>
+                                        <div>
+                                            <div style="font-weight: 600;">John Doe</div>
+                                            <div class="member-role">Head Coach (Owner)</div>
+                                        </div>
+                                    </div>
+                                    <div class="member-actions">
+                                        <button type="button" class="btn" style="padding: 0.5rem;">
+                                            Edit
+                                        </button>
+                                    </div>
+                                </li>
+                                
+                                <li class="member-item">
+                                    <div class="member-info">
+                                        <div class="member-avatar">SJ</div>
+                                        <div>
+                                            <div style="font-weight: 600;">Sarah Johnson</div>
+                                            <div class="member-role">Assistant Coach</div>
+                                        </div>
+                                    </div>
+                                    <div class="member-actions">
+                                        <button type="button" class="btn" style="padding: 0.5rem;">
+                                            Edit
+                                        </button>
+                                        <button type="button" class="btn" style="padding: 0.5rem; color: var(--accent-red);">
+                                            Remove
+                                        </button>
+                                    </div>
+                                </li>
+                                
+                                <li class="member-item">
+                                    <div class="member-info">
+                                        <div class="member-avatar">MB</div>
+                                        <div>
+                                            <div style="font-weight: 600;">Mike Brown</div>
+                                            <div class="member-role">Analyst</div>
+                                        </div>
+                                    </div>
+                                    <div class="member-actions">
+                                        <button type="button" class="btn" style="padding: 0.5rem;">
+                                            Edit
+                                        </button>
+                                        <button type="button" class="btn" style="padding: 0.5rem; color: var(--accent-red);">
+                                            Remove
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                            
+                            <button type="button" class="btn" style="margin-top: 1rem;">
+                                <i class="fas fa-plus"></i> Add Team Member
+                            </button>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 2rem;">
+                            <button type="submit" class="btn btn-primary">
+                                Save Team Settings
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Notifications Section -->
+                <div class="settings-section" id="notifications-section">
+                    <div class="section-header">
+                        <h2>Notification Preferences</h2>
+                        <p>Choose how and when you want to be notified</p>
+                    </div>
+
+                    <form id="notificationsForm">
+                        <div class="toggle-group">
+                            <div class="toggle-label">
+                                <span>Email Notifications</span>
+                                <span>Receive updates via email</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-group">
+                            <div class="toggle-label">
+                                <span>Analysis Complete</span>
+                                <span>Get notified when analysis is ready</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-group">
+                            <div class="toggle-label">
+                                <span>Weekly Reports</span>
+                                <span>Receive weekly performance summaries</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-group">
+                            <div class="toggle-label">
+                                <span>Team Updates</span>
+                                <span>Notifications about team members</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-group">
+                            <div class="toggle-label">
+                                <span>Product Updates</span>
+                                <span>News about new features and improvements</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 2rem;">
+                            <button type="submit" class="btn btn-primary">
+                                Save Notification Settings
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Security Section -->
+                <div class="settings-section" id="security-section">
+                    <div class="section-header">
+                        <h2>Security Settings</h2>
+                        <p>Manage your password and account security</p>
+                    </div>
+
+                    <form id="securityForm">
+                        <div class="form-group">
+                            <label for="currentPassword">Current Password *</label>
+                            <input type="password" id="currentPassword" class="form-control" required>
+                            <div class="error-message" id="currentPasswordError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="newPassword">New Password *</label>
+                            <input type="password" id="newPassword" class="form-control" required>
+                            <div class="form-help">Minimum 8 characters with at least one number and one special character</div>
+                            <div class="error-message" id="newPasswordError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm New Password *</label>
+                            <input type="password" id="confirmPassword" class="form-control" required>
+                            <div class="error-message" id="confirmPasswordError"></div>
+                        </div>
+
+                        <div class="toggle-group" style="margin-top: 2rem;">
+                            <div class="toggle-label">
+                                <span>Two-Factor Authentication</span>
+                                <span>Add an extra layer of security to your account</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 2rem;">
+                            <button type="submit" class="btn btn-primary">
+                                Update Password
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Active Sessions -->
+                    <div style="margin-top: 3rem;">
+                        <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">Active Sessions</h3>
+                        <div style="background-color: var(--light-bg); padding: 1.5rem; border-radius: 8px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                <div>
+                                    <div style="font-weight: 600;">Current Session</div>
+                                    <div style="color: var(--medium-gray); font-size: 0.9rem;">
+                                        Chrome • Windows • New York, USA
+                                    </div>
+                                </div>
+                                <span style="color: var(--football-green); font-weight: 600;">Active Now</span>
+                            </div>
+                            
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <div style="font-weight: 600;">iPhone 13</div>
+                                    <div style="color: var(--medium-gray); font-size: 0.9rem;">
+                                        Safari • iOS • Last active: 2 hours ago
+                                    </div>
+                                </div>
+                                <button class="btn" style="color: var(--accent-red); padding: 0.5rem 1rem;">
+                                    Revoke
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <button class="btn" style="margin-top: 1rem; width: 100%;">
+                            <i class="fas fa-sign-out-alt"></i> Sign Out All Other Sessions
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Billing Section -->
+                <div class="settings-section" id="billing-section">
+                    <div class="section-header">
+                        <h2>Billing & Subscription</h2>
+                        <p>Manage your subscription and billing information</p>
+                    </div>
+
+                    <!-- Current Plan -->
+                    <div style="background-color: #F0F9FF; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--primary-blue); margin-bottom: 2rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h3 style="color: var(--primary-blue); margin-bottom: 0.5rem;">Professional Plan</h3>
+                                <p style="color: var(--medium-gray);">$149/month • Next billing date: Dec 15, 2024</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 2rem; font-weight: 800; color: var(--primary-blue);">$149</div>
+                                <div style="color: var(--medium-gray); font-size: 0.9rem;">per month</div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 1.5rem;">
+                            <button class="btn btn-green" style="margin-right: 1rem;">
+                                Upgrade Plan
+                            </button>
+                            <button class="btn" style="color: var(--accent-red);">
+                                Cancel Subscription
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">Payment Method</h3>
+                        <div style="background-color: var(--light-bg); padding: 1.5rem; border-radius: 8px;">
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                <div style="color: var(--primary-blue); font-size: 1.5rem;">
+                                    <i class="fab fa-cc-visa"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight: 600;">Visa ending in 4242</div>
+                                    <div style="color: var(--medium-gray); font-size: 0.9rem;">Expires 12/2025</div>
+                                </div>
+                                <div style="margin-left: auto;">
+                                    <button class="btn" style="padding: 0.5rem 1rem;">
+                                        Edit
+                                    </button>
+                                </div>
+                            </div>
+                            <button class="btn" style="width: 100%;">
+                                <i class="fas fa-plus"></i> Add Payment Method
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Billing History -->
+                    <div>
+                        <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">Billing History</h3>
+                        <div style="background-color: var(--light-bg); padding: 1.5rem; border-radius: 8px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--light-gray);">
+                                <div>
+                                    <div style="font-weight: 600;">November 15, 2024</div>
+                                    <div style="color: var(--medium-gray); font-size: 0.9rem;">Professional Plan</div>
+                                </div>
+                                <div>
+                                    <div style="font-weight: 600;">$149.00</div>
+                                    <button class="btn" style="padding: 0.3rem 0.8rem; font-size: 0.9rem; margin-top: 0.3rem;">
+                                        Invoice
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0;">
+                                <div>
+                                    <div style="font-weight: 600;">October 15, 2024</div>
+                                    <div style="color: var(--medium-gray); font-size: 0.9rem;">Professional Plan</div>
+                                </div>
+                                <div>
+                                    <div style="font-weight: 600;">$149.00</div>
+                                    <button class="btn" style="padding: 0.3rem 0.8rem; font-size: 0.9rem; margin-top: 0.3rem;">
+                                        Invoice
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Danger Zone -->
+                <div class="danger-zone">
+                    <h3>Danger Zone</h3>
+                    <p>These actions are irreversible. Please proceed with caution.</p>
+                    
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="btn" style="background-color: white; border: 2px solid var(--accent-red); color: var(--accent-red);" onclick="exportAllData()">
+                            <i class="fas fa-download"></i> Export All Data
+                        </button>
+                        <button class="btn" style="background-color: var(--accent-red); color: white;" onclick="deleteAccount()">
+                            <i class="fas fa-trash"></i> Delete Account
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>FootIntel Pro</h3>
+                    <p>Professional football analysis platform</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2024 FootIntel Pro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Section switching
+            const sidebarLinks = document.querySelectorAll('.sidebar-links a');
+            const sections = document.querySelectorAll('.settings-section');
+            
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links and sections
+                    sidebarLinks.forEach(l => l.classList.remove('active'));
+                    sections.forEach(s => s.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Show corresponding section
+                    const sectionId = this.getAttribute('data-section');
+                    document.getElementById(`${sectionId}-section`).classList.add('active');
+                    
+                    // Scroll to top of content
+                    document.querySelector('.settings-content').scrollTop = 0;
+                });
+            });
+            
+            // Form submissions
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Show success message
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.textContent;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+                    submitBtn.disabled = true;
+                    
+                    // Simulate save
+                    setTimeout(() => {
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                        
+                        // Show temporary success message
+                        const successMsg = document.createElement('div');
+                        successMsg.style.cssText = `
+                            position: fixed;
+                            top: 100px;
+                            right: 20px;
+                            background-color: var(--football-green);
+                            color: white;
+                            padding: 1rem 1.5rem;
+                            border-radius: 8px;
+                            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                            z-index: 10000;
+                            animation: slideIn 0.3s ease;
+                        `;
+                        successMsg.innerHTML = `
+                            <i class="fas fa-check-circle"></i> Settings saved successfully!
+                        `;
+                        document.body.appendChild(successMsg);
+                        
+                        setTimeout(() => {
+                            successMsg.style.animation = 'slideOut 0.3s ease';
+                            setTimeout(() => successMsg.remove(), 300);
+                        }, 3000);
+                    }, 1000);
+                });
+            });
+            
+            // Add animation styles
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+        
+        // Form reset functions
+        function resetProfileForm() {
+            document.getElementById('firstName').value = 'John';
+            document.getElementById('lastName').value = 'Doe';
+            document.getElementById('email').value = 'john.doe@firstlightacademy.com';
+            document.getElementById('phone').value = '+1 (555) 123-4567';
+            document.getElementById('position').value = 'Head Coach';
+            document.getElementById('bio').value = 'Experienced football coach specializing in youth development and tactical analysis. Currently leading FirstLight Academy\'s U19 team.';
+        }
+        
+        // Action functions
+        function changeAvatar() {
+            alert('Avatar change functionality would open file picker\nIn production, this would upload to server');
+        }
+        
+        function exportAllData() {
+            if (confirm('This will export all your data including team analyses, reports, and settings. Continue?')) {
+                alert('Exporting all data...\nIn production, this would generate and download a ZIP file.');
+                
+                // Simulate export
+                const btn = document.querySelector('.danger-zone button:first-child');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Exporting...';
+                btn.disabled = true;
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    alert('Data exported successfully! Check your downloads.');
+                }, 2000);
+            }
+        }
+        
+        function deleteAccount() {
+            if (confirm('WARNING: This will permanently delete your account and all associated data. This action cannot be undone. Are you absolutely sure?')) {
+                const password = prompt('Please enter your password to confirm account deletion:');
+                if (password) {
+                    alert('Account deletion confirmed. Your account will be permanently deleted in 30 days.\nYou will receive a confirmation email.');
+                    
+                    // In production, this would make API call to delete account
+                    const btn = document.querySelector('.danger-zone button:last-child');
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+                    btn.disabled = true;
+                    
+                    setTimeout(() => {
+                        // Redirect to homepage after "deletion"
+                        window.location.href = 'index.html';
+                    }, 2000);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
