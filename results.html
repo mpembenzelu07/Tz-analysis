@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results | FootIntel Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Import global styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary-blue: #1E3A8A;
+            --secondary-blue: #3B82F6;
+            --football-green: #059669;
+            --accent-red: #DC2626;
+            --light-bg: #F9FAFB;
+            --dark-text: #111827;
+            --medium-gray: #6B7280;
+            --light-gray: #E5E7EB;
+            --white: #FFFFFF;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--football-green);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-text);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        .nav-links a.active {
+            color: var(--football-green);
+            font-weight: 600;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        .btn-green {
+            background-color: var(--football-green);
+            color: white;
+        }
+
+        .btn-green:hover {
+            background-color: #047857;
+        }
+
+        /* Results Page Styles */
+        .results-container {
+            margin-top: 100px;
+            padding: 2rem 0;
+        }
+
+        /* Team Header */
+        .team-header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .team-info h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-meta {
+            display: flex;
+            gap: 2rem;
+            opacity: 0.9;
+        }
+
+        .team-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Results Navigation Tabs */
+        .results-nav {
+            display: flex;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .nav-tab {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            text-decoration: none;
+            color: var(--medium-gray);
+            font-weight: 500;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-tab:hover {
+            background-color: var(--light-bg);
+        }
+
+        .nav-tab.active {
+            color: var(--primary-blue);
+            border-bottom-color: var(--football-green);
+        }
+
+        /* Results Content */
+        .results-content {
+            display: none;
+        }
+
+        .results-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Team Overview Section */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .overview-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .style-card {
+            border-left: 4px solid var(--football-green);
+        }
+
+        .formation-card {
+            border-left: 4px solid var(--secondary-blue);
+        }
+
+        .style-tag {
+            display: inline-block;
+            background-color: #D1FAE5;
+            color: var(--football-green);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Key Metrics */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .metric-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Player Analysis */
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .player-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .player-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .player-card.dangerous {
+            border: 2px solid var(--accent-red);
+        }
+
+        .player-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .player-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        .player-position {
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+        }
+
+        .impact-score {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--football-green);
+        }
+
+        .player-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .stat-item {
+            font-size: 0.9rem;
+        }
+
+        .stat-label {
+            color: var(--medium-gray);
+        }
+
+        .stat-value {
+            font-weight: 600;
+        }
+
+        .strengths-weaknesses {
+            margin-top: 1rem;
+        }
+
+        .strength-tag, .weakness-tag {
+            display: inline-block;
+            padding: 0.3rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .strength-tag {
+            background-color: #D1FAE5;
+            color: var(--football-green);
+        }
+
+        .weakness-tag {
+            background-color: #FEE2E2;
+            color: var(--accent-red);
+        }
+
+        /* Strengths & Weaknesses Section */
+        .sw-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .strengths-card, .weaknesses-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .strengths-card {
+            border-left: 4px solid var(--football-green);
+        }
+
+        .weaknesses-card {
+            border-left: 4px solid var(--accent-red);
+        }
+
+        .sw-item {
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .sw-item.strength {
+            background-color: #F0FDF4;
+        }
+
+        .sw-item.weakness {
+            background-color: #FEF2F2;
+        }
+
+        .sw-icon {
+            font-size: 1.5rem;
+        }
+
+        .strength .sw-icon {
+            color: var(--football-green);
+        }
+
+        .weakness .sw-icon {
+            color: var(--accent-red);
+        }
+
+        /* Tactical Recommendations */
+        .tactical-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tactical-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .tactical-card.primary {
+            border: 2px solid var(--football-green);
+        }
+
+        .tactical-card h3 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tactical-steps {
+            list-style: none;
+        }
+
+        .tactical-steps li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .tactical-steps li:last-child {
+            border-bottom: none;
+        }
+
+        .step-number {
+            background-color: var(--primary-blue);
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        /* Visualization */
+        .visualization {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .pitch {
+            width: 100%;
+            max-width: 800px;
+            height: 500px;
+            background-color: #059669;
+            border-radius: 8px;
+            margin: 0 auto;
+            position: relative;
+            background-image: 
+                linear-gradient(to right, white 1px, transparent 1px),
+                linear-gradient(to bottom, white 1px, transparent 1px);
+            background-size: 10% 10%;
+            border: 2px solid white;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #d1d5db;
+            text-decoration: none;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #d1d5db;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .overview-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .sw-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .team-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .team-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .results-nav {
+                flex-wrap: wrap;
+            }
+            
+            .nav-tab {
+                flex: 1 0 50%;
+            }
+            
+            .players-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <i class="fas fa-futbol"></i>
+                    FootIntel Pro
+                </a>
+                
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="upload.html">Analyze</a></li>
+                    <li><a href="database.html">Database</a></li>
+                    <li><a href="reports.html" class="active">Reports</a></li>
+                </ul>
+                
+                <div class="user-menu">
+                    <a href="dashboard.html" class="btn btn-primary">Back to Dashboard</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Results Content -->
+    <div class="container results-container">
+        <!-- Team Header -->
+        <div class="team-header">
+            <div class="team-info">
+                <h1>FC Barcelona U19</h1>
+                <div class="team-meta">
+                    <span><i class="far fa-calendar"></i> Analyzed: Nov 15, 2024</span>
+                    <span><i class="fas fa-trophy"></i> UEFA Youth League</span>
+                    <span><i class="fas fa-chart-line"></i> 6 matches analyzed</span>
+                </div>
+            </div>
+            <div class="team-actions">
+                <a href="reports.html" class="btn btn-green">
+                    <i class="fas fa-file-pdf"></i> Generate Report
+                </a>
+                <a href="#" class="btn">
+                    <i class="fas fa-share"></i> Share
+                </a>
+            </div>
+        </div>
+
+        <!-- Results Navigation Tabs -->
+        <div class="results-nav">
+            <a href="#overview" class="nav-tab active" data-tab="overview">
+                <i class="fas fa-eye"></i> Overview
+            </a>
+            <a href="#players" class="nav-tab" data-tab="players">
+                <i class="fas fa-users"></i> Player Analysis
+            </a>
+            <a href="#strengths" class="nav-tab" data-tab="strengths">
+                <i class="fas fa-bullseye"></i> Strengths & Weaknesses
+            </a>
+            <a href="#tactical" class="nav-tab" data-tab="tactical">
+                <i class="fas fa-chess-board"></i> Tactical Recommendations
+            </a>
+            <a href="#visual" class="nav-tab" data-tab="visual">
+                <i class="fas fa-chart-bar"></i> Visualizations
+            </a>
+        </div>
+
+        <!-- Results Content -->
+        
+        <!-- Tab 1: Overview -->
+        <div class="results-content active" id="overview-content">
+            <div class="overview-grid">
+                <div class="overview-card style-card">
+                    <h2 style="color: var(--primary-blue); margin-bottom: 1rem;">
+                        <i class="fas fa-brain"></i> Team Style
+                    </h2>
+                    <p style="margin-bottom: 1rem;">Based on analysis of 6 matches, this team exhibits the following characteristics:</p>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <span class="style-tag">High Possession</span>
+                        <span class="style-tag">Vertical Tiki-Taka</span>
+                        <span class="style-tag">High Press</span>
+                        <span class="style-tag">Organized Defense</span>
+                    </div>
+                    
+                    <p><strong>Primary Style:</strong> Possession-based attacking football with emphasis on vertical passing and high pressing.</p>
+                </div>
+                
+                <div class="overview-card formation-card">
+                    <h2 style="color: var(--primary-blue); margin-bottom: 1rem;">
+                        <i class="fas fa-project-diagram"></i> Formation & Tendencies
+                    </h2>
+                    <div style="text-align: center; margin: 1.5rem 0;">
+                        <div style="font-size: 3rem; font-weight: 800; color: var(--primary-blue);">4-3-3</div>
+                        <div style="color: var(--medium-gray);">Most Frequent Formation</div>
+                    </div>
+                    
+                    <ul style="list-style: none;">
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--light-gray);">
+                            <i class="fas fa-arrow-right" style="color: var(--football-green); margin-right: 10px;"></i>
+                            Attacks primarily through left flank (42%)
+                        </li>
+                        <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--light-gray);">
+                            <i class="fas fa-arrow-right" style="color: var(--football-green); margin-right: 10px;"></i>
+                            Defensive line pushes high (avg: 38m from goal)
+                        </li>
+                        <li style="padding: 0.5rem 0;">
+                            <i class="fas fa-arrow-right" style="color: var(--football-green); margin-right: 10px;"></i>
+                            Quick transitions after regaining possession
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Key Metrics -->
+            <h2 style="color: var(--primary-blue); margin: 2rem 0 1rem;">
+                <i class="fas fa-chart-line"></i> Key Performance Metrics
+            </h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">68%</div>
+                    <div class="metric-label">Average Possession</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value">87%</div>
+                    <div class="metric-label">Pass Accuracy</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value">14.2</div>
+                    <div class="metric-label">Shots per Game</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value">6.8</div>
+                    <div class="metric-label">PPDA (Press Intensity)</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value">2.1</div>
+                    <div class="metric-label">xG per Game</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value">72%</div>
+                    <div class="metric-label">Duel Win Rate</div>
+                </div>
+            </div>
+
+            <!-- Most Dangerous Player -->
+            <div class="overview-card" style="margin: 2rem 0; border-left: 4px solid var(--accent-red);">
+                <h2 style="color: var(--primary-blue); margin-bottom: 1rem;">
+                    <i class="fas fa-fire"></i> Most Dangerous Player
+                </h2>
+                
+                <div style="display: flex; align-items: center; gap: 2rem;">
+                    <div style="flex-shrink: 0;">
+                        <div style="width: 100px; height: 100px; background-color: var(--light-gray); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--primary-blue); font-weight: 600;">
+                            #10
+                        </div>
+                    </div>
+                    
+                    <div style="flex: 1;">
+                        <h3 style="font-size: 1.5rem; color: var(--primary-blue);">Pablo Gavi</h3>
+                        <div style="color: var(--medium-gray); margin-bottom: 1rem;">Central Midfielder | Impact Score: 9.2/10</div>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                            <div>
+                                <div style="font-weight: 600; color: var(--football-green);">5 Goals</div>
+                                <div style="font-size: 0.9rem; color: var(--medium-gray);">in 6 matches</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 600; color: var(--football-green);">7 Assists</div>
+                                <div style="font-size: 0.9rem; color: var(--medium-gray);">League highest</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 600; color: var(--football-green);">89%</div>
+                                <div style="font-size: 0.9rem; color: var(--medium-gray);">Pass Accuracy</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 600; color: var(--football-green);">24</div>
+                                <div style="font-size: 0.9rem; color: var(--medium-gray);">Key Passes</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1rem;">
+                    <strong>Key Strength:</strong> Exceptional vision and creativity in final third. Creates 4.1 chances per game.
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Player Analysis -->
+        <div class="results-content" id="players-content">
+            <h2 style="color: var(--primary-blue); margin-bottom: 2rem;">
+                <i class="fas fa-users"></i> Player Analysis
+            </h2>
+            
+            <div class="players-grid">
+                <!-- Player 1 -->
+                <div class="player-card dangerous">
+                    <div class="player-header">
+                        <div>
+                            <div class="player-name">Pablo Gavi</div>
+                            <div class="player-position">Central Midfielder | #10</div>
+                        </div>
+                        <div class="impact-score">9.2</div>
+                    </div>
+                    
+                    <div class="player-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">Goals</div>
+                            <div class="stat-value">5</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Assists</div>
+                            <div class="stat-value">7</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Pass Acc.</div>
+                            <div class="stat-value">89%</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Key Passes</div>
+                            <div class="stat-value">24</div>
+                        </div>
+                    </div>
+                    
+                    <div class="strengths-weaknesses">
+                        <div style="margin-bottom: 0.5rem;">
+                            <strong style="color: var(--football-green);">Strengths:</strong>
+                            <div>
+                                <span class="strength-tag">Creativity</span>
+                                <span class="strength-tag">Vision</span>
+                                <span class="strength-tag">Press Resistance</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <strong style="color: var(--accent-red);">Weaknesses:</strong>
+                            <div>
+                                <span class="weakness-tag">Aerial Duels</span>
+                                <span class="weakness-tag">Defensive Positioning</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Player 2 -->
+                <div class="player-card">
+                    <div class="player-header">
+                        <div>
+                            <div class="player-name">Alejandro Balde</div>
+                            <div class="player-position">Left Back | #3</div>
+                        </div>
+                        <div class="impact-score">8.5</div>
+                    </div>
+                    
+                    <div class="player-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">Assists</div>
+                            <div class="stat-value">4</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Cross Acc.</div>
+                            <div class="stat-value">78%</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Tackles</div>
+                            <div class="stat-value">32</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Recoveries</div>
+                            <div class="stat-value">45</div>
+                        </div>
+                    </div>
+                    
+                    <div class="strengths-weaknesses">
+                        <div style="margin-bottom: 0.5rem;">
+                            <strong style="color: var(--football-green);">Strengths:</strong>
+                            <div>
+                                <span class="strength-tag">Pace</span>
+                                <span class="strength-tag">Crossing</span>
+                                <span class="strength-tag">Overlaps</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <strong style="color: var(--accent-red);">Weaknesses:</strong>
+                            <div>
+                                <span class="weakness-tag">Defensive Awareness</span>
+                                <span class="weakness-tag">Aerial Duels</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Player 3 -->
+                <div class="player-card">
+                    <div class="player-header">
+                        <div>
+                            <div class="player-name">Ilias Akhomach</div>
+                            <div class="player-position">Right Winger | #11</div>
+                        </div>
+                        <div class="impact-score">8.1</div>
+                    </div>
+                    
+                    <div class="player-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">Goals</div>
+                            <div class="stat-value">4</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Dribbles</div>
+                            <div class="stat-value">38</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">1v1 Success</div>
+                            <div class="stat-value">72%</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Key Passes</div>
+                            <div class="stat-value">18</div>
+                        </div>
+                    </div>
+                    
+                    <div class="strengths-weaknesses">
+                        <div style="margin-bottom: 0.5rem;">
+                            <strong style="color: var(--football-green);">Strengths:</strong>
+                            <div>
+                                <span class="strength-tag">Dribbling</span>
+                                <span class="strength-tag">1v1 Situations</span>
+                                <span class="strength-tag">Finishing</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <strong style="color: var(--accent-red);">Weaknesses:</strong>
+                            <div>
+                                <span class="weakness-tag">Tracking Back</span>
+                                <span class="weakness-tag">Decision Making</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Player 4 -->
+                <div class="player-card">
+                    <div class="player-header">
+                        <div>
+                            <div class="player-name">Arnau Tenas</div>
+                            <div class="player-position">Goalkeeper | #13</div>
+                        </div>
+                        <div class="impact-score">7.8</div>
+                    </div>
+                    
+                    <div class="player-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">Clean Sheets</div>
+                            <div class="stat-value">3</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Saves</div>
+                            <div class="stat-value">24</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Pass Acc.</div>
+                            <div class="stat-value">92%</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Claims</div>
+                            <div class="stat-value">18</div>
+                        </div>
+                    </div>
+                    
+                    <div class="strengths-weaknesses">
+                        <div style="margin-bottom: 0.5rem;">
+                            <strong style="color: var(--football-green);">Strengths:</strong>
+                            <div>
+                                <span class="strength-tag">Distribution</span>
+                                <span class="strength-tag">Reflexes</span>
+                                <span class="strength-tag">Command of Area</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <strong style="color: var(--accent-red);">Weaknesses:</strong>
+                            <div>
+                                <span class="weakness-tag">Aerial Balls</span>
+                                <span class="weakness-tag">Long Shots</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: Strengths & Weaknesses -->
+        <div class="results-content" id="strengths-content">
+            <h2 style="color: var(--primary-blue); margin-bottom: 2rem;">
+                <i class="fas fa-bullseye"></i> Team Strengths & Weaknesses
+            </h2>
+            
+            <div class="sw-grid">
+                <!-- Strengths -->
+                <div class="strengths-card">
+                    <h3 style="color: var(--football-green); margin-bottom: 1.5rem;">
+                        <i class="fas fa-thumbs-up"></i> Team Strengths
+                    </h3>
+                    
+                    <div class="sw-item strength">
+                        <div class="sw-icon">
+                            <i class="fas fa-passport"></i>
+                        </div>
+                        <div>
+                            <strong>Possession Dominance</strong>
+                            <div style="font-size: 0.9rem; color: var(--medium-gray);">
+                                Average 68% possession per game, excellent ball retention
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="sw-item strength">
+                        <div class="sw-icon">
+                            <i class="fas fa-running"></i>
+                        </div>
+                        <div>
+                            <strong>High Press Effectiveness</strong>
+                            <div style="font-size: 0.9rem; color: var(--medium-gray);">
+                                PPDA of 6.8 indicates intense and organized pressing
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="sw-item strength">
+                        <div class="sw-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div>
+                            <strong>Quick Transitions</strong>
+                            <div style="font-size: 0.9rem; color: var(--medium-gray);">
+                                Average 8.2 seconds from regaining possession to entering final third
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="sw-item strength">
+                        <div class="sw-icon">
+                            <i class="fas fa-futbol"></i>
+                        </div>
+                        <div>
+                            <strong>Set Piece Efficiency</strong>
+                            <div style="font-size: 0.9rem; color: var(--medium-gray);">
+                                4 goals from corners, 87% delivery accuracy
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Weaknesses -->
+                <div class="weaknesses-card">
+                    <h3 style="color: var(--accent-red); margin-bottom: 1.5rem;">
+                        <i class="fas fa-thumbs-down"></i> Team Weaknesses
+                    </h3>
+                    
+                    <div class="sw-item weakness">
+                        <div class="sw-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div>
+                            <strong>Left Flank Vulnerability</strong>
+                            <div style="font-size: 0.9rem; color: var(--medium-gray);">
+                                65% of conceded attacks come from right side
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="sw-item weakness">
+                        <div class="sw-icon">
+                            <i class="fas fa-plane-departure"></i>
+                        </div>
+                        <div>
+                            <strong>Aerial Defense</strong>
+                            <div style="font-size: 0.9rem; color: var(--medium-gray);">
+                                Win only 32% of aerial duels in defensive third
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="sw-item weakness">
+                        <div class="sw-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div>
+                            <strong>Counter-attack Susceptibility</strong>
+                            <div style="font-size: 0.9rem; color: var(--medium-gray);">
+                                Conceded 5 goals from fast breaks
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="sw-item weakness">
+                        <div class="sw-icon">
+                            <i class="fas fa-hourglass-end"></i>
+                        </div>
+                        <div>
+                            <strong>Late Game Concentration</strong>
+                            <div style="font-size: 0.9rem; color: var(--medium-gray);">
+                                70% of goals conceded in final 15 minutes
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 4: Tactical Recommendations -->
+        <div class="results-content" id="tactical-content">
+            <h2 style="color: var(--primary-blue); margin-bottom: 2rem;">
+                <i class="fas fa-chess-board"></i> How to Beat This Team
+            </h2>
+            
+            <div class="tactical-grid">
+                <!-- Primary Strategy -->
+                <div class="tactical-card primary">
+                    <h3>
+                        <i class="fas fa-star"></i> Primary Strategy
+                    </h3>
+                    
+                    <ul class="tactical-steps">
+                        <li>
+                            <div class="step-number">1</div>
+                            <div>
+                                <strong>Exploit Right Flank</strong>
+                                <div style="font-size: 0.9rem; color: var(--medium-gray);">
+                                    Their left-back (Balde) pushes high and leaves space behind
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="step-number">2</div>
+                            <div>
+                                <strong>Quick Vertical Passes</strong>
+                                <div style="font-size: 0.9rem; color: var(--medium-gray);">
+                                    Bypass their high press with direct balls to forwards
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="step-number">3</div>
+                            <div>
+                                <strong>Target Aerial Duels</strong>
+                                <div style="font-size: 0.9rem; color: var(--medium-gray);">
+                                    Attack crosses to exploit weak aerial defense
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="step-number">4</div>
+                            <div>
+                                <strong>Midfield Disruption</strong>
+                                <div style="font-size: 0.9rem; color: var(--medium-gray);">
+                                    Man-mark Gavi (#10) to cut off their creative source
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Alternative Approaches -->
+                <div class="tactical-card">
+                    <h3>
+                        <i class="fas fa-exchange-alt"></i> Alternative Approaches
+                    </h3>
+                    
+                    <ul class="tactical-steps">
+                        <li>
+                            <div class="step-number">1</div>
+                            <div>
+                                <strong>Low Block & Counter</strong>
+                                <div style="font-size: 0.9rem; color: var(--medium-gray);">
+                                    Sit deep and exploit spaces behind their full-backs
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="step-number">2</div>
+                            <div>
+                                <strong>Set Piece Focus</strong>
+                                <div style="font-size: 0.9rem; color: var(--medium-gray);">
+                                    Target goalkeeper's weak side on corners
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="step-number">3</div>
+                            <div>
+                                <strong>High Press Early</strong>
+                                <div style="font-size: 0.9rem; color: var(--medium-gray);">
+                                    Force errors in their build-up phase
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Key Matchups -->
+                <div class="tactical-card">
+                    <h3>
+                        <i class="fas fa-handshake"></i> Key Individual Matchups
+                    </h3>
+                    
+                    <ul class="tactical-steps">
+                        <li>
+                            <div><strong>Their #10 (Gavi) vs Our #6</strong></div>
+                            <div style="font-size: 0.9rem; color: var(--medium-gray);">
+                                Physical defensive midfielder to limit his influence
+                            </div>
+                        </li>
+                        <li>
+                            <div><strong>Our RW vs Their LB (Balde)</strong></div>
+                            <div style="font-size: 0.9rem; color: var(--medium-gray);">
+                                Pace on right wing to exploit defensive weaknesses
+                            </div>
+                        </li>
+                        <li>
+                            <div><strong>Aerial Target vs Their CBs</strong></div>
+                            <div style="font-size: 0.9rem; color: var(--medium-gray);">
+                                Tall forward to win aerial duels in box
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Formation Recommendation -->
+            <div class="tactical-card" style="margin-top: 2rem;">
+                <h3 style="color: var(--primary-blue);">
+                    <i class="fas fa-project-diagram"></i> Recommended Formation: 4-2-3-1
+                </h3>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1rem;">
+                    <div>
+                        <h4 style="margin-bottom: 0.5rem;">Why this works:</h4>
+                        <ul style="padding-left: 1.5rem; color: var(--medium-gray);">
+                            <li>Provides defensive stability with double pivot</li>
+                            <li>Allows quick transitions through attacking midfield</li>
+                            <li>Creates natural overloads on right flank</li>
+                            <li>Maintains compact shape to limit space for #10</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 style="margin-bottom: 0.5rem;">Key Instructions:</h4>
+                        <ul style="padding-left: 1.5rem; color: var(--medium-gray);">
+                            <li>Right-back: Stay conservative, overlap selectively</li>
+                            <li>CDMs: One to mark #10, one to provide cover</li>
+                            <li>RW: Stay wide, attack space behind left-back</li>
+                            <li>Forward: Target aerial balls, hold up play</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 5: Visualizations -->
+        <div class="results-content" id="visual-content">
+            <h2 style="color: var(--primary-blue); margin-bottom: 2rem;">
+                <i class="fas fa-chart-bar"></i> Visual Analysis
+            </h2>
+            
+            <!-- Pitch Visualization -->
+            <div class="visualization">
+                <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">Average Positions & Heat Map</h3>
+                <div class="pitch">
+                    <!-- Pitch visualization would go here -->
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; text-align: center;">
+                        <i class="fas fa-futbol" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <div>Interactive pitch visualization</div>
+                        <div style="font-size: 0.9rem; opacity: 0.8;">(Would show player positions and heat maps)</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Charts Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                <div class="overview-card">
+                    <h4 style="color: var(--primary-blue); margin-bottom: 1rem;">Passing Network</h4>
+                    <div style="height: 200px; background-color: var(--light-bg); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--medium-gray);">
+                        <i class="fas fa-project-diagram" style="font-size: 2rem; margin-right: 10px;"></i>
+                        Passing visualization
+                    </div>
+                </div>
+                
+                <div class="overview-card">
+                    <h4 style="color: var(--primary-blue); margin-bottom: 1rem;">Shot Locations</h4>
+                    <div style="height: 200px; background-color: var(--light-bg); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--medium-gray);">
+                        <i class="fas fa-bullseye" style="font-size: 2rem; margin-right: 10px;"></i>
+                        Shot map visualization
+                    </div>
+                </div>
+                
+                <div class="overview-card">
+                    <h4 style="color: var(--primary-blue); margin-bottom: 1rem;">Defensive Actions</h4>
+                    <div style="height: 200px; background-color: var(--light-bg); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--medium-gray);">
+                        <i class="fas fa-shield-alt" style="font-size: 2rem; margin-right: 10px;"></i>
+                        Defensive heat map
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>FootIntel Pro</h3>
+                    <p>Professional football analysis platform</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Actions</h3>
+                    <ul class="footer-links">
+                        <li><a href="reports.html">Generate Report</a></li>
+                        <li><a href="compare.html">Compare Teams</a></li>
+                        <li><a href="upload.html">New Analysis</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2024 FootIntel Pro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Results tab functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const navTabs = document.querySelectorAll('.nav-tab');
+            const resultsContents = document.querySelectorAll('.results-content');
+            
+            navTabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all tabs and contents
+                    navTabs.forEach(t => t.classList.remove('active'));
+                    resultsContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Show corresponding content
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-content`).classList.add('active');
+                });
+            });
+            
+            // Add some sample data visualization
+            const pitch = document.querySelector('.pitch');
+            if (pitch) {
+                // Create player position dots
+                const positions = [
+                    { top: '10%', left: '50%', number: '13' }, // GK
+                    { top: '25%', left: '20%', number: '2' },  // RB
+                    { top: '25%', left: '40%', number: '4' },  // RCB
+                    { top: '25%', left: '60%', number: '5' },  // LCB
+                    { top: '25%', left: '80%', number: '3' },  // LB
+                    { top: '40%', left: '30%', number: '6' },  // RCM
+                    { top: '40%', left: '50%', number: '8' },  // CM
+                    { top: '40%', left: '70%', number: '10' }, // LCM
+                    { top: '60%', left: '30%', number: '7' },  // RW
+                    { top: '60%', left: '70%', number: '11' }, // LW
+                    { top: '75%', left: '50%', number: '9' }   // ST
+                ];
+                
+                positions.forEach(pos => {
+                    const player = document.createElement('div');
+                    player.style.position = 'absolute';
+                    player.style.top = pos.top;
+                    player.style.left = pos.left;
+                    player.style.transform = 'translate(-50%, -50%)';
+                    player.style.width = '30px';
+                    player.style.height = '30px';
+                    player.style.backgroundColor = '#1E3A8A';
+                    player.style.border = '2px solid white';
+                    player.style.borderRadius = '50%';
+                    player.style.display = 'flex';
+                    player.style.alignItems = 'center';
+                    player.style.justifyContent = 'center';
+                    player.style.color = 'white';
+                    player.style.fontSize = '0.8rem';
+                    player.style.fontWeight = '600';
+                    player.style.cursor = 'pointer';
+                    player.textContent = pos.number;
+                    player.title = `Player #${pos.number}`;
+                    
+                    player.addEventListener('mouseenter', function() {
+                        this.style.transform = 'translate(-50%, -50%) scale(1.2)';
+                    });
+                    
+                    player.addEventListener('mouseleave', function() {
+                        this.style.transform = 'translate(-50%, -50%) scale(1)';
+                    });
+                    
+                    pitch.appendChild(player);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
