@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Database | FootIntel Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== GLOBAL STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary-blue: #1E3A8A;
+            --secondary-blue: #3B82F6;
+            --football-green: #059669;
+            --accent-red: #DC2626;
+            --light-bg: #F9FAFB;
+            --dark-text: #111827;
+            --medium-gray: #6B7280;
+            --light-gray: #E5E7EB;
+            --white: #FFFFFF;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--football-green);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-text);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        .nav-links a.active {
+            color: var(--football-green);
+            font-weight: 600;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        .btn-green {
+            background-color: var(--football-green);
+            color: white;
+        }
+
+        .btn-green:hover {
+            background-color: #047857;
+        }
+
+        /* ===== DATABASE PAGE ===== */
+        .database-container {
+            margin-top: 100px;
+            padding: 2rem 0;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+        }
+
+        .page-subtitle {
+            color: var(--medium-gray);
+            margin-top: 0.5rem;
+        }
+
+        /* ===== SEARCH & FILTERS ===== */
+        .search-section {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+
+        .search-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 500px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.9rem 1rem 0.9rem 3rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--medium-gray);
+        }
+
+        .filter-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--light-bg);
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .filters-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-group label {
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--dark-text);
+        }
+
+        .filter-group select {
+            padding: 0.8rem;
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+            background-color: white;
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+
+        /* ===== TEAMS GRID ===== */
+        .teams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .team-card {
+            background-color: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .team-card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .team-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .team-logo {
+            width: 50px;
+            height: 50px;
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--primary-blue);
+            font-size: 1.2rem;
+        }
+
+        .team-name h3 {
+            color: var(--primary-blue);
+            margin-bottom: 0.2rem;
+        }
+
+        .team-meta {
+            font-size: 0.9rem;
+            color: var(--medium-gray);
+        }
+
+        .team-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            border: 1px solid var(--light-gray);
+            background-color: white;
+            color: var(--medium-gray);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            background-color: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .team-card-content {
+            padding: 1.5rem;
+        }
+
+        .team-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--medium-gray);
+        }
+
+        .team-style {
+            margin-top: 1rem;
+        }
+
+        .style-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .style-tag {
+            background-color: var(--light-bg);
+            color: var(--medium-gray);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .team-card-footer {
+            padding: 1rem 1.5rem;
+            background-color: var(--light-bg);
+            border-top: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--medium-gray);
+        }
+
+        /* ===== PAGINATION ===== */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        .pagination-btn {
+            padding: 0.7rem 1.2rem;
+            border: 1px solid var(--light-gray);
+            background-color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background-color: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-numbers {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .page-number {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .page-number:hover {
+            background-color: var(--light-bg);
+        }
+
+        .page-number.active {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #d1d5db;
+            text-decoration: none;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #d1d5db;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .teams-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .search-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+            
+            .teams-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .team-stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .team-card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .team-actions {
+                align-self: flex-end;
+            }
+            
+            .team-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <i class="fas fa-futbol"></i>
+                    FootIntel Pro
+                </a>
+                
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="upload.html">Analyze</a></li>
+                    <li><a href="database.html" class="active">Database</a></li>
+                    <li><a href="reports.html">Reports</a></li>
+                </ul>
+                
+                <div class="user-menu">
+                    <a href="dashboard.html" class="btn btn-primary">Back to Dashboard</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Database Content -->
+    <div class="container database-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h1>Team Database</h1>
+                <p class="page-subtitle">Browse and search all analyzed teams</p>
+            </div>
+            <div>
+                <span style="color: var(--medium-gray);">
+                    <i class="fas fa-database"></i> 24 teams analyzed
+                </span>
+            </div>
+        </div>
+
+        <!-- Search & Filters -->
+        <div class="search-section">
+            <div class="search-header">
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Search teams by name, league, or style...">
+                </div>
+                <div class="filter-toggle" id="filterToggle">
+                    <i class="fas fa-filter"></i>
+                    Filters
+                    <span id="filterCount" style="background-color: var(--primary-blue); color: white; padding: 0.1rem 0.5rem; border-radius: 10px; font-size: 0.8rem;">0</span>
+                </div>
+            </div>
+
+            <div class="filters-row" id="filtersRow" style="display: none;">
+                <div class="filter-group">
+                    <label for="leagueFilter">League</label>
+                    <select id="leagueFilter">
+                        <option value="">All Leagues</option>
+                        <option value="youth">Youth Leagues</option>
+                        <option value="uefa">UEFA Competitions</option>
+                        <option value="domestic">Domestic Leagues</option>
+                        <option value="friendly">Friendly Matches</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="styleFilter">Playing Style</label>
+                    <select id="styleFilter">
+                        <option value="">All Styles</option>
+                        <option value="possession">Possession-based</option>
+                        <option value="counter">Counter-attacking</option>
+                        <option value="pressing">High Pressing</option>
+                        <option value="direct">Direct Play</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="dateFilter">Analysis Date</label>
+                    <select id="dateFilter">
+                        <option value="">Any Time</option>
+                        <option value="week">Last 7 days</option>
+                        <option value="month">Last 30 days</option>
+                        <option value="quarter">Last 90 days</option>
+                    </select>
+                </div>
+                
+                <div class="filter-actions">
+                    <button class="btn" onclick="clearFilters()">
+                        Clear All
+                    </button>
+                    <button class="btn btn-primary" onclick="applyFilters()">
+                        Apply Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Teams Grid -->
+        <div class="teams-grid" id="teamsGrid">
+            <!-- Team cards will be populated by JavaScript -->
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <button class="pagination-btn" id="prevPage" disabled>
+                <i class="fas fa-chevron-left"></i> Previous
+            </button>
+            
+            <div class="pagination-numbers" id="pageNumbers">
+                <!-- Page numbers will be populated by JavaScript -->
+            </div>
+            
+            <button class="pagination-btn" id="nextPage">
+                Next <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>FootIntel Pro</h3>
+                    <p>Professional football analysis platform</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="upload.html">New Analysis</a></li>
+                        <li><a href="reports.html">Reports</a></li>
+                        <li><a href="compare.html">Compare Teams</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Database</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">How to Use</a></li>
+                        <li><a href="#">Search Tips</a></li>
+                        <li><a href="#">Export Data</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2024 FootIntel Pro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sample team data
+        const teamsData = [
+            {
+                id: 1,
+                name: "FC Barcelona U19",
+                league: "UEFA Youth League",
+                style: ["Possession", "High Press", "Attacking"],
+                lastAnalyzed: "2024-11-15",
+                matches: 6,
+                avgPossession: 68,
+                dangerPlayer: "Pablo Gavi (9.2)",
+                logo: "FCB"
+            },
+            {
+                id: 2,
+                name: "Real Madrid Academy",
+                league: "Domestic Youth League",
+                style: ["Counter-attack", "Direct", "Organized"],
+                lastAnalyzed: "2024-11-10",
+                matches: 5,
+                avgPossession: 52,
+                dangerPlayer: "Rodrygo Jr. (8.8)",
+                logo: "RMA"
+            },
+            {
+                id: 3,
+                name: "Ajax Youth Team",
+                league: "Youth Eredivisie",
+                style: ["Possession", "Developmental", "Pressing"],
+                lastAnalyzed: "2024-11-08",
+                matches: 6,
+                avgPossession: 65,
+                dangerPlayer: "Brian Brobbey (8.5)",
+                logo: "AJA"
+            },
+            {
+                id: 4,
+                name: "Bayern Munich U19",
+                league: "German Youth League",
+                style: ["Direct", "Pressing", "Attacking"],
+                lastAnalyzed: "2024-11-05",
+                matches: 5,
+                avgPossession: 58,
+                dangerPlayer: "Jamal Musiala (9.0)",
+                logo: "BAY"
+            },
+            {
+                id: 5,
+                name: "Manchester City EDS",
+                league: "Premier League 2",
+                style: ["Possession", "Positional", "High Press"],
+                lastAnalyzed: "2024-11-02",
+                matches: 6,
+                avgPossession: 72,
+                dangerPlayer: "Cole Palmer (8.7)",
+                logo: "MCI"
+            },
+            {
+                id: 6,
+                name: "Liverpool Academy",
+                league: "Premier League 2",
+                style: ["Counter-attack", "Pressing", "Direct"],
+                lastAnalyzed: "2024-10-30",
+                matches: 5,
+                avgPossession: 54,
+                dangerPlayer: "Harvey Elliott (8.6)",
+                logo: "LIV"
+            },
+            {
+                id: 7,
+                name: "Paris Saint-Germain U19",
+                league: "UEFA Youth League",
+                style: ["Possession", "Individual", "Attacking"],
+                lastAnalyzed: "2024-10-28",
+                matches: 6,
+                avgPossession: 62,
+                dangerPlayer: "Xavi Simons (8.9)",
+                logo: "PSG"
+            },
+            {
+                id: 8,
+                name: "Chelsea Development",
+                league: "Premier League 2",
+                style: ["Counter-attack", "Organized", "Physical"],
+                lastAnalyzed: "2024-10-25",
+                matches: 5,
+                avgPossession: 56,
+                dangerPlayer: "Mason Burstow (8.3)",
+                logo: "CHE"
+            }
+        ];
+
+        // Pagination variables
+        let currentPage = 1;
+        const teamsPerPage = 6;
+        let filteredTeams = [...teamsData];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize the database
+            renderTeams();
+            setupPagination();
+            
+            // Search functionality
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', function() {
+                filterTeams();
+            });
+            
+            // Filter toggle
+            const filterToggle = document.getElementById('filterToggle');
+            const filtersRow = document.getElementById('filtersRow');
+            
+            filterToggle.addEventListener('click', function() {
+                const isVisible = filtersRow.style.display === 'grid';
+                filtersRow.style.display = isVisible ? 'none' : 'grid';
+                this.innerHTML = isVisible ? 
+                    '<i class="fas fa-filter"></i> Filters <span id="filterCount" style="background-color: var(--primary-blue); color: white; padding: 0.1rem 0.5rem; border-radius: 10px; font-size: 0.8rem;">0</span>' :
+                    '<i class="fas fa-times"></i> Close Filters';
+            });
+            
+            // Filter change listeners
+            document.querySelectorAll('#filtersRow select').forEach(select => {
+                select.addEventListener('change', updateFilterCount);
+            });
+        });
+        
+        function renderTeams() {
+            const teamsGrid = document.getElementById('teamsGrid');
+            teamsGrid.innerHTML = '';
+            
+            // Calculate pagination
+            const startIndex = (currentPage - 1) * teamsPerPage;
+            const endIndex = startIndex + teamsPerPage;
+            const teamsToShow = filteredTeams.slice(startIndex, endIndex);
+            
+            if (teamsToShow.length === 0) {
+                teamsGrid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 4rem; color: var(--medium-gray);">
+                        <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <h3 style="margin-bottom: 0.5rem;">No teams found</h3>
+                        <p>Try adjusting your search or filters</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Render team cards
+            teamsToShow.forEach(team => {
+                const teamCard = document.createElement('div');
+                teamCard.className = 'team-card';
+                teamCard.innerHTML = `
+                    <div class="team-card-header">
+                        <div class="team-info">
+                            <div class="team-logo">${team.logo}</div>
+                            <div class="team-name">
+                                <h3>${team.name}</h3>
+                                <div class="team-meta">
+                                    <i class="fas fa-trophy"></i> ${team.league}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="team-actions">
+                            <button class="action-btn" onclick="viewTeam(${team.id})" title="View Analysis">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="action-btn" onclick="compareTeam(${team.id})" title="Compare">
+                                <i class="fas fa-exchange-alt"></i>
+                            </button>
+                            <button class="action-btn" onclick="exportTeam(${team.id})" title="Export">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="team-card-content">
+                        <div class="team-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">${team.matches}</div>
+                                <div class="stat-label">Matches</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${team.avgPossession}%</div>
+                                <div class="stat-label">Possession</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${team.dangerPlayer.split('(')[1].replace(')', '')}</div>
+                                <div class="stat-label">Top Player</div>
+                            </div>
+                        </div>
+                        
+                        <div class="team-style">
+                            <div style="font-size: 0.9rem; color: var(--medium-gray); margin-bottom: 0.5rem;">Playing Style</div>
+                            <div class="style-tags">
+                                ${team.style.map(tag => `<span class="style-tag">${tag}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="team-card-footer">
+                        <span>
+                            <i class="far fa-calendar"></i> Analyzed: ${formatDate(team.lastAnalyzed)}
+                        </span>
+                        <span>
+                            <i class="fas fa-chart-line"></i> ${team.dangerPlayer.split('(')[0]}
+                        </span>
+                    </div>
+                `;
+                
+                teamsGrid.appendChild(teamCard);
+            });
+            
+            // Update pagination controls
+            updatePagination();
+        }
+        
+        function setupPagination() {
+            const prevBtn = document.getElementById('prevPage');
+            const nextBtn = document.getElementById('nextPage');
+            
+            prevBtn.addEventListener('click', function() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTeams();
+                }
+            });
+            
+            nextBtn.addEventListener('click', function() {
+                const totalPages = Math.ceil(filteredTeams.length / teamsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderTeams();
+                }
+            });
+        }
+        
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredTeams.length / teamsPerPage);
+            const pageNumbers = document.getElementById('pageNumbers');
+            const prevBtn = document.getElementById('prevPage');
+            const nextBtn = document.getElementById('nextPage');
+            
+            // Update button states
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage === totalPages;
+            
+            // Update page numbers
+            pageNumbers.innerHTML = '';
+            
+            // Always show first page
+            pageNumbers.appendChild(createPageNumber(1));
+            
+            // Show ellipsis if needed
+            if (currentPage > 3) {
+                const ellipsis = document.createElement('span');
+                ellipsis.textContent = '...';
+                ellipsis.style.padding = '0 0.5rem';
+                pageNumbers.appendChild(ellipsis);
+            }
+            
+            // Show current page and neighbors
+            for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+                pageNumbers.appendChild(createPageNumber(i));
+            }
+            
+            // Show ellipsis if needed
+            if (currentPage < totalPages - 2) {
+                const ellipsis = document.createElement('span');
+                ellipsis.textContent = '...';
+                ellipsis.style.padding = '0 0.5rem';
+                pageNumbers.appendChild(ellipsis);
+            }
+            
+            // Always show last page if there's more than one page
+            if (totalPages > 1) {
+                pageNumbers.appendChild(createPageNumber(totalPages));
+            }
+        }
+        
+        function createPageNumber(page) {
+            const pageElement = document.createElement('div');
+            pageElement.className = 'page-number';
+            if (page === currentPage) {
+                pageElement.classList.add('active');
+            }
+            pageElement.textContent = page;
+            pageElement.addEventListener('click', function() {
+                currentPage = page;
+                renderTeams();
+            });
+            return pageElement;
+        }
+        
+        function filterTeams() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const leagueFilter = document.getElementById('leagueFilter').value;
+            const styleFilter = document.getElementById('styleFilter').value;
+            const dateFilter = document.getElementById('dateFilter').value;
+            
+            filteredTeams = teamsData.filter(team => {
+                // Search term filter
+                const matchesSearch = !searchTerm || 
+                    team.name.toLowerCase().includes(searchTerm) ||
+                    team.league.toLowerCase().includes(searchTerm) ||
+                    team.style.some(s => s.toLowerCase().includes(searchTerm));
+                
+                // League filter
+                const matchesLeague = !leagueFilter || 
+                    (leagueFilter === 'youth' && team.league.toLowerCase().includes('youth')) ||
+                    (leagueFilter === 'uefa' && team.league.toLowerCase().includes('uefa')) ||
+                    (leagueFilter === 'domestic' && !team.league.toLowerCase().includes('uefa') && !team.league.toLowerCase().includes('youth')) ||
+                    (leagueFilter === 'friendly' && team.league.toLowerCase().includes('friendly'));
+                
+                // Style filter
+                const matchesStyle = !styleFilter || 
+                    (styleFilter === 'possession' && team.style.some(s => s.toLowerCase().includes('possession'))) ||
+                    (styleFilter === 'counter' && team.style.some(s => s.toLowerCase().includes('counter'))) ||
+                    (styleFilter === 'pressing' && team.style.some(s => s.toLowerCase().includes('press'))) ||
+                    (styleFilter === 'direct' && team.style.some(s => s.toLowerCase().includes('direct')));
+                
+                // Date filter
+                const matchesDate = !dateFilter || isWithinDateRange(team.lastAnalyzed, dateFilter);
+                
+                return matchesSearch && matchesLeague && matchesStyle && matchesDate;
+            });
+            
+            // Reset to first page
+            currentPage = 1;
+            renderTeams();
+        }
+        
+        function isWithinDateRange(dateString, range) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            switch(range) {
+                case 'week': return diffDays <= 7;
+                case 'month': return diffDays <= 30;
+                case 'quarter': return diffDays <= 90;
+                default: return true;
+            }
+        }
+        
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+        
+        function updateFilterCount() {
+            const filterCount = document.getElementById('filterCount');
+            let count = 0;
+            
+            // Count active filters
+            document.querySelectorAll('#filtersRow select').forEach(select => {
+                if (select.value) count++;
+            });
+            
+            filterCount.textContent = count;
+        }
+        
+        function applyFilters() {
+            filterTeams();
+            document.getElementById('filtersRow').style.display = 'none';
+            document.getElementById('filterToggle').innerHTML = 
+                '<i class="fas fa-filter"></i> Filters <span id="filterCount" style="background-color: var(--primary-blue); color: white; padding: 0.1rem 0.5rem; border-radius: 10px; font-size: 0.8rem;">0</span>';
+        }
+        
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('leagueFilter').value = '';
+            document.getElementById('styleFilter').value = '';
+            document.getElementById('dateFilter').value = '';
+            updateFilterCount();
+            filterTeams();
+        }
+        
+        // Action functions
+        function viewTeam(teamId) {
+            // In a real app, this would navigate to the team's analysis page
+            alert(`Viewing analysis for team ID: ${teamId}\nWould navigate to results page.`);
+            // window.location.href = `results.html?team=${teamId}`;
+        }
+        
+        function compareTeam(teamId) {
+            // In a real app, this would add team to comparison
+            alert(`Adding team ${teamId} to comparison\nWould navigate to comparison tool.`);
+            // window.location.href = `compare.html?team=${teamId}`;
+        }
+        
+        function exportTeam(teamId) {
+            // In a real app, this would export team data
+            alert(`Exporting data for team ${teamId}\nWould trigger download of CSV/PDF.`);
+        }
+    </script>
+</body>
+</html>
