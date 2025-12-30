@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing | FootIntel Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== GLOBAL STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary-blue: #1E3A8A;
+            --secondary-blue: #3B82F6;
+            --football-green: #059669;
+            --accent-red: #DC2626;
+            --light-bg: #F9FAFB;
+            --dark-text: #111827;
+            --medium-gray: #6B7280;
+            --light-gray: #E5E7EB;
+            --white: #FFFFFF;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--football-green);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-text);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        .nav-links a.active {
+            color: var(--football-green);
+            font-weight: 600;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        .btn-green {
+            background-color: var(--football-green);
+            color: white;
+        }
+
+        .btn-green:hover {
+            background-color: #047857;
+            transform: translateY(-2px);
+        }
+
+        /* ===== PRICING PAGE ===== */
+        .pricing-container {
+            margin-top: 100px;
+            padding: 2rem 0;
+        }
+
+        /* Hero Section */
+        .pricing-hero {
+            text-align: center;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-hero h1 {
+            font-size: 3.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        .pricing-hero p {
+            font-size: 1.2rem;
+            color: var(--medium-gray);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Toggle Switch */
+        .billing-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .toggle-label {
+            font-weight: 500;
+            color: var(--medium-gray);
+        }
+
+        .toggle-label.active {
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--medium-gray);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--football-green);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+
+        .savings-badge {
+            background-color: #FEF3C7;
+            color: #92400E;
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        /* Pricing Cards */
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .pricing-card {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            position: relative;
+            transition: transform 0.3s;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .pricing-card.featured {
+            border: 2px solid var(--football-green);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--football-green);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .plan-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-description {
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+        }
+
+        .plan-price {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .price-amount {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            line-height: 1;
+        }
+
+        .price-period {
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .price-note {
+            color: var(--medium-gray);
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Features List */
+        .plan-features {
+            margin: 2rem 0;
+        }
+
+        .features-list {
+            list-style: none;
+        }
+
+        .features-list li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .features-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-icon {
+            color: var(--football-green);
+            width: 20px;
+        }
+
+        .feature-disabled {
+            color: var(--light-gray);
+        }
+
+        .feature-disabled .feature-icon {
+            color: var(--light-gray);
+        }
+
+        /* Comparison Table */
+        .comparison-section {
+            margin: 4rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            color: var(--medium-gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .comparison-table {
+            background-color: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 2fr repeat(3, 1fr);
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 1.5rem;
+            font-weight: 600;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 2fr repeat(3, 1fr);
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--light-gray);
+            align-items: center;
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .row-header {
+            font-weight: 500;
+            color: var(--dark-text);
+        }
+
+        .feature-check {
+            text-align: center;
+            color: var(--football-green);
+            font-weight: 600;
+        }
+
+        .feature-limit {
+            text-align: center;
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            margin: 4rem 0;
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .faq-item {
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .faq-question {
+            color: var(--primary-blue);
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .faq-question i {
+            color: var(--football-green);
+        }
+
+        .faq-answer {
+            color: var(--medium-gray);
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 4rem;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            border-radius: 20px;
+            margin-bottom: 4rem;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 3rem 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #d1d5db;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .pricing-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+            
+            .pricing-card.featured:hover {
+                transform: translateY(-10px);
+            }
+            
+            .table-header,
+            .table-row {
+                grid-template-columns: 2fr repeat(2, 1fr);
+            }
+            
+            .table-header div:nth-child(4),
+            .table-row div:nth-child(4) {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .pricing-hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .pricing-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title h2,
+            .cta-section h2 {
+                font-size: 2rem;
+            }
+            
+            .table-header,
+            .table-row {
+                grid-template-columns: 2fr 1fr;
+            }
+            
+            .table-header div:nth-child(3),
+            .table-row div:nth-child(3) {
+                display: none;
+            }
+            
+            .cta-section {
+                padding: 3rem 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .pricing-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .billing-toggle {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .pricing-card {
+                padding: 1.5rem;
+            }
+            
+            .table-header,
+            .table-row {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 0.5rem;
+            }
+            
+            .table-header div:first-child,
+            .table-row div:first-child {
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <i class="fas fa-futbol"></i>
+                    FootIntel Pro
+                </a>
+                
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="features.html">Features</a></li>
+                    <li><a href="pricing.html" class="active">Pricing</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="login.html">Login</a></li>
+                </ul>
+                
+                <div class="user-menu">
+                    <a href="signup.html" class="btn btn-primary">Get Started</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Pricing Content -->
+    <div class="container pricing-container">
+        <!-- Hero Section -->
+        <div class="pricing-hero">
+            <h1>Simple, Transparent Pricing</h1>
+            <p>Choose the plan that fits your team's needs. All plans include our core analysis features.</p>
+            
+            <!-- Billing Toggle -->
+            <div class="billing-toggle">
+                <span class="toggle-label active" id="monthlyLabel">Monthly Billing</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="billingToggle">
+                    <span class="toggle-slider"></span>
+                </label>
+                <span class="toggle-label" id="yearlyLabel">
+                    Yearly Billing
+                    <span class="savings-badge">Save 20%</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- Pricing Cards -->
+        <div class="pricing-cards">
+            <!-- Academy Plan -->
+            <div class="pricing-card">
+                <div class="plan-header">
+                    <div class="plan-name">Academy</div>
+                    <div class="plan-description">Perfect for youth academies and amateur clubs</div>
+                </div>
+                
+                <div class="plan-price">
+                    <div class="price-amount" id="academyPrice">$49</div>
+                    <div class="price-period" id="academyPeriod">per month</div>
+                    <div class="price-note">Billed monthly</div>
+                </div>
+                
+                <div class="plan-features">
+                    <ul class="features-list">
+                        <li>
+                            <i class="fas fa-check feature-icon"></i>
+                            <span>Analyze up to 4 teams/month</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check feature-icon"></i>
+                            <span>Basic team style analysis</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check feature-icon"></i>
+                            <span>Player impact scoring</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check feature-icon"></i>
+                            <span>PDF report generation</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check feature-icon"></i>
+                            <span>Email support</span>
+                        </li>
+                        <li class="feature-disabled">
+                            <i class="fas fa-times feature-icon"></i>
+                            <span>Video analysis</span>
+                        </li>
+                        <li class="feature-disabled">
+                            <i class="fas fa-times feature-icon"></i>
+                            <span>Custom report templates</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <a href="signup.html?plan=academy" class="btn btn-primary" style="width: 100%;">
+                    Get Started
+                </a>
+            </div>
+            
+            <!-- Professional Plan (Featured) -->
+            <div class="pricing-card featured">
+                <div class="featured-badge">MOST POPULAR</div>
+                
+                <div class="plan-header">
+                    <div class="plan-name">Professional</div>
+                    <div class="plan-description">For semi-pro and professional clubs</div>
+                </div>
+                
+                <div class="plan-price">
+                    <div class="price-amount" id="professionalPrice">$149</div>
+                    <div class="price-period" id="professionalPeriod">per month</div>
+                    <div class="price-note">Billed monthly</div>
+                </div>
+                
+                <div class="plan-features">
+                    <ul class="features-list">
+                        <li>
+                            <i class="fas fa-check feature-icon"></i>
+                            <span>Analyze up to 15 teams/month</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check feature-icon"></i>
+                            <span>Advanced tactical analysis</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check feature-icon"></i>
+                            <span>Video upload & analysis</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check feature-icon"></i>
+                            <span>Custom report templates</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check feature-icon"></i>
+                            <span>Team collaboration tools</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check feature-icon"></i>
+                            <span>Priority support</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check feature-icon"></i>
+                            <span>API access</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <a href="signup.html?plan=professional" class="btn btn-green" style="width: 100%;">
+                    Start Free Trial
+                </a>
+            </div>
+            
+            <!-- Enterprise Plan -->
+            <div class="pricing-card">
+                <div class="plan-header">
+                    <div class="plan-name">Enterprise</div>
+                    <div class="plan-description">For clubs with advanced needs</div>
+                </div>
+                
+                <div class="plan-price">
+                    <div class="price-amount" id="enterprisePrice">Custom</div>
+                    <div class="price-period">Contact for pricing</div>
+                    <div class="price-note">Volume discounts available</div>
+                </div>
+                
+                <div class="plan-features">
+                    <ul class="features-list">
+                        <li>
+                            <i class="fas fa-check feature-icon"></i>
+                            <span>Unlimited team analysis</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check feature-icon"></i>
+                            <span>API access & data export</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check feature-icon"></i>
+                            <span>Custom AI model training</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check feature-icon"></i>
+                            <span>Dedicated account manager</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check feature-icon"></i>
+                            <span>On-premise deployment option</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check feature-icon"></i>
+                            <span>24/7 phone support</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check feature-icon"></i>
+                            <span>White-label solution</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <a href="contact.html" class="btn btn-primary" style="width: 100%;">
+                    Contact Sales
+                </a>
+            </div>
+        </div>
+
+        <!-- Feature Comparison -->
+        <div class="comparison-section">
+            <div class="section-title">
+                <h2>Feature Comparison</h2>
+                <p>Detailed breakdown of what's included in each plan</p>
+            </div>
+            
+            <div class="comparison-table">
+                <div class="table-header">
+                    <div>Feature</div>
+                    <div>Academy</div>
+                    <div>Professional</div>
+                    <div>Enterprise</div>
+                </div>
+                
+                <div class="table-row">
+                    <div class="row-header">Team Analysis</div>
+                    <div class="feature-limit">4/month</div>
+                    <div class="feature-limit">15/month</div>
+                    <div class="feature-check">Unlimited</div>
+                </div>
+                
+                <div class="table-row">
+                    <div class="row-header">Video Analysis</div>
+                    <div class="feature-check">-</div>
+                    <div class="feature-check">✓</div>
+                    <div class="feature-check">✓</div>
+                </div>
+                
+                <div class="table-row">
+                    <div class="row-header">Report Generation</div>
+                    <div class="feature-check">Basic PDF</div>
+                    <div class="feature-check">Custom Templates</div>
+                    <div class="feature-check">White-label</div>
+                </div>
+                
+                <div class="table-row">
+                    <div class="row-header">Team Members</div>
+                    <div class="feature-limit">2 users</div>
+                    <div class="feature-limit">10 users</div>
+                    <div class="feature-check">Unlimited</div>
+                </div>
+                
+                <div class="table-row">
+                    <div class="row-header">Data Storage</div>
+                    <div class="feature-limit">5 GB</div>
+                    <div class="feature-limit">50 GB</div>
+                    <div class="feature-check">Custom</div>
+                </div>
+                
+                <div class="table-row">
+                    <div class="row-header">API Access</div>
+                    <div class="feature-check">-</div>
+                    <div class="feature-check">✓</div>
+                    <div class="feature-check">✓</div>
+                </div>
+                
+                <div class="table-row">
+                    <div class="row-header">Support</div>
+                    <div class="feature-check">Email</div>
+                    <div class="feature-check">Priority</div>
+                    <div class="feature-check">24/7 Phone</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section">
+            <div class="section-title">
+                <h2>Common Questions</h2>
+                <p>Everything you need to know about our pricing</p>
+            </div>
+            
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i>
+                        Can I switch plans later?
+                    </div>
+                    <div class="faq-answer">
+                        Yes, you can upgrade or downgrade your plan at any time. When upgrading, you'll get prorated credit for your current plan.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i>
+                        Is there a free trial?
+                    </div>
+                    <div class="faq-answer">
+                        Yes! All plans come with a 14-day free trial. No credit card required to start. You get full access to all features during the trial.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i>
+                        What payment methods do you accept?
+                    </div>
+                    <div class="faq-answer">
+                        We accept all major credit cards (Visa, MasterCard, American Express), PayPal, and bank transfers for annual plans.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i>
+                        Do you offer discounts for academies?
+                    </div>
+                    <div class="faq-answer">
+                        Yes, we offer special educational pricing for registered youth academies and non-profit organizations. Contact our sales team for details.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i>
+                        Can I cancel anytime?
+                    </div>
+                    <div class="faq-answer">
+                        Absolutely. You can cancel your subscription at any time. No long-term contracts or cancellation fees.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle"></i>
+                        Do you offer volume discounts?
+                    </div>
+                    <div class="faq-answer">
+                        Yes, for clubs with multiple teams or football associations, we offer volume discounts. Contact our enterprise sales team for custom pricing.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <h2>Ready to Transform Your Team Analysis?</h2>
+            <p>Join 500+ teams worldwide who use FootIntel Pro to gain competitive advantages through data-driven insights.</p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="signup.html" class="btn" style="background-color: white; color: var(--primary-blue);">
+                    Start 14-Day Free Trial
+                </a>
+                <a href="contact.html" class="btn" style="background-color: transparent; border: 2px solid white;">
+                    Schedule a Demo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>FootIntel Pro</h3>
+                    <p>Professional football intelligence platform that turns match data into winning strategies.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Product</h3>
+                    <ul class="footer-links">
+                        <li><a href="features.html">Features</a></li>
+                        <li><a href="pricing.html">Pricing</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="#">Updates</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="help.html">Help Center</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Status</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">GDPR</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2024 FootIntel Pro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Billing toggle functionality
+            const billingToggle = document.getElementById('billingToggle');
+            const monthlyLabel = document.getElementById('monthlyLabel');
+            const yearlyLabel = document.getElementById('yearlyLabel');
+            
+            // Price elements
+            const academyPrice = document.getElementById('academyPrice');
+            const academyPeriod = document.getElementById('academyPeriod');
+            const professionalPrice = document.getElementById('professionalPrice');
+            const professionalPeriod = document.getElementById('professionalPeriod');
+            const enterprisePrice = document.getElementById('enterprisePrice');
+            
+            // Original prices (monthly)
+            const originalPrices = {
+                academy: 49,
+                professional: 149,
+                enterprise: 'Custom'
+            };
+            
+            billingToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    // Switch to yearly billing
+                    monthlyLabel.classList.remove('active');
+                    yearlyLabel.classList.add('active');
+                    
+                    // Update prices (20% discount)
+                    academyPrice.textContent = `$${Math.floor(originalPrices.academy * 12 * 0.8)}`;
+                    academyPeriod.textContent = 'per year';
+                    
+                    professionalPrice.textContent = `$${Math.floor(originalPrices.professional * 12 * 0.8)}`;
+                    professionalPeriod.textContent = 'per year';
+                    
+                    // Update note
+                    document.querySelectorAll('.price-note').forEach(note => {
+                        note.textContent = 'Billed annually (save 20%)';
+                    });
+                } else {
+                    // Switch to monthly billing
+                    yearlyLabel.classList.remove('active');
+                    monthlyLabel.classList.add('active');
+                    
+                    // Revert to monthly prices
+                    academyPrice.textContent = `$${originalPrices.academy}`;
+                    academyPeriod.textContent = 'per month';
+                    
+                    professionalPrice.textContent = `$${originalPrices.professional}`;
+                    professionalPeriod.textContent = 'per month';
+                    
+                    // Update note
+                    document.querySelectorAll('.price-note').forEach(note => {
+                        note.textContent = 'Billed monthly';
+                    });
+                }
+            });
+            
+            // Plan selection highlight
+            const pricingCards = document.querySelectorAll('.pricing-card');
+            pricingCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (!e.target.closest('a')) {
+                        // Remove highlight from all cards
+                        pricingCards.forEach(c => c.style.borderColor = 'var(--light-gray)');
+                        
+                        // Add highlight to clicked card
+                        this.style.borderColor = 'var(--primary-blue)';
+                        this.style.boxShadow = '0 10px 25px rgba(0,0,0,0.1)';
+                        
+                        // Scroll to CTA after a delay
+                        setTimeout(() => {
+                            document.querySelector('.cta-section').scrollIntoView({
+                                behavior: 'smooth'
+                            });
+                        }, 300);
+                    }
+                });
+            });
+            
+            // Update URL parameters for plan selection
+            const planButtons = document.querySelectorAll('.pricing-card a');
+            planButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    // Get plan name from button text or parent card
+                    const card = this.closest('.pricing-card');
+                    const planName = card.querySelector('.plan-name').textContent;
+                    
+                    // Store selected plan in localStorage for signup page
+                    localStorage.setItem('selectedPlan', planName);
+                    
+                    // Add animation to button
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 150);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
