@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Analysis | FootIntel Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Import global styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary-blue: #1E3A8A;
+            --secondary-blue: #3B82F6;
+            --football-green: #059669;
+            --accent-red: #DC2626;
+            --light-bg: #F9FAFB;
+            --dark-text: #111827;
+            --medium-gray: #6B7280;
+            --light-gray: #E5E7EB;
+            --white: #FFFFFF;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--football-green);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-text);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        .nav-links a.active {
+            color: var(--football-green);
+            font-weight: 600;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        .btn-green {
+            background-color: var(--football-green);
+            color: white;
+        }
+
+        .btn-green:hover {
+            background-color: #047857;
+        }
+
+        /* Upload Page Styles */
+        .upload-container {
+            margin-top: 100px;
+            padding: 2rem 0;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--medium-gray);
+            font-size: 1.1rem;
+        }
+
+        /* Upload Wizard */
+        .upload-wizard {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+
+        .wizard-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .wizard-steps::before {
+            content: '';
+            position: absolute;
+            top: 25px;
+            left: 10%;
+            right: 10%;
+            height: 3px;
+            background-color: var(--light-gray);
+            z-index: 1;
+        }
+
+        .wizard-step {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background-color: var(--light-gray);
+            color: var(--medium-gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0 auto 1rem;
+            transition: all 0.3s;
+        }
+
+        .wizard-step.active .step-number {
+            background-color: var(--football-green);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .wizard-step.completed .step-number {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        .step-label {
+            font-weight: 500;
+            color: var(--medium-gray);
+        }
+
+        .wizard-step.active .step-label {
+            color: var(--football-green);
+            font-weight: 600;
+        }
+
+        /* Step Content */
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-title {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 3px dashed var(--light-gray);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .upload-area:hover {
+            border-color: var(--secondary-blue);
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
+        .upload-area.drag-over {
+            border-color: var(--football-green);
+            background-color: rgba(5, 150, 105, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--medium-gray);
+            margin-bottom: 1rem;
+        }
+
+        .upload-area:hover .upload-icon {
+            color: var(--secondary-blue);
+        }
+
+        .upload-text h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark-text);
+        }
+
+        .upload-text p {
+            color: var(--medium-gray);
+            margin-bottom: 1rem;
+        }
+
+        .file-types {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .file-type-tag {
+            background-color: var(--light-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--medium-gray);
+        }
+
+        /* File List */
+        .file-list {
+            margin-top: 2rem;
+        }
+
+        .file-list h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-blue);
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background-color: var(--light-bg);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .file-icon {
+            color: var(--primary-blue);
+            font-size: 1.2rem;
+        }
+
+        .file-name {
+            font-weight: 500;
+        }
+
+        .file-size {
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .remove-file {
+            color: var(--accent-red);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .remove-file:hover {
+            background-color: rgba(220, 38, 38, 0.1);
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark-text);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .form-help {
+            font-size: 0.9rem;
+            color: var(--medium-gray);
+            margin-top: 0.5rem;
+        }
+
+        /* Match Input Cards */
+        .match-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .match-card {
+            background-color: var(--light-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 2px solid var(--light-gray);
+        }
+
+        .match-card h4 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        /* Processing Overlay */
+        .processing-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .processing-overlay.active {
+            display: flex;
+        }
+
+        .processing-modal {
+            background-color: white;
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .processing-icon {
+            font-size: 4rem;
+            color: var(--football-green);
+            margin-bottom: 1.5rem;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: var(--light-gray);
+            border-radius: 4px;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--football-green);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Wizard Navigation */
+        .wizard-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #d1d5db;
+            text-decoration: none;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #d1d5db;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .wizard-steps {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .wizard-steps::before {
+                display: none;
+            }
+            
+            .wizard-step {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                text-align: left;
+            }
+            
+            .step-number {
+                margin: 0;
+            }
+            
+            .upload-area {
+                padding: 2rem 1rem;
+            }
+            
+            .file-types {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <i class="fas fa-futbol"></i>
+                    FootIntel Pro
+                </a>
+                
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="upload.html" class="active">Analyze</a></li>
+                    <li><a href="database.html">Database</a></li>
+                    <li><a href="reports.html">Reports</a></li>
+                </ul>
+                
+                <div class="user-menu">
+                    <a href="dashboard.html" class="btn btn-primary">Back to Dashboard</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Upload Content -->
+    <div class="container upload-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Upload Match Data</h1>
+            <p class="page-subtitle">Upload data from 6 matches to get comprehensive team analysis and tactical recommendations</p>
+        </div>
+
+        <!-- Upload Wizard -->
+        <div class="upload-wizard">
+            <!-- Wizard Steps -->
+            <div class="wizard-steps">
+                <div class="wizard-step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Team Info</div>
+                </div>
+                <div class="wizard-step" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Upload Data</div>
+                </div>
+                <div class="wizard-step" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Review</div>
+                </div>
+                <div class="wizard-step" data-step="4">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Process</div>
+                </div>
+            </div>
+
+            <!-- Step 1: Team Information -->
+            <div class="step-content active" id="step-1">
+                <h2 class="step-title">Team Information</h2>
+                
+                <div class="form-group">
+                    <label for="team-name">Team Name *</label>
+                    <input type="text" id="team-name" class="form-control" placeholder="e.g., FC Barcelona U19">
+                    <div class="form-help">Enter the full name of the team you're analyzing</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="team-type">Team Type</label>
+                    <select id="team-type" class="form-control">
+                        <option value="">Select team type</option>
+                        <option value="youth">Youth Academy</option>
+                        <option value="amateur">Amateur Club</option>
+                        <option value="semi-pro">Semi-Professional</option>
+                        <option value="professional">Professional</option>
+                        <option value="national">National Team</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="league">League / Competition</label>
+                    <input type="text" id="league" class="form-control" placeholder="e.g., UEFA Youth League">
+                </div>
+
+                <div class="form-group">
+                    <label for="analysis-date">Analysis Date</label>
+                    <input type="date" id="analysis-date" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Additional Notes</label>
+                    <textarea id="notes" class="form-control" rows="4" placeholder="Any additional information about the team or matches..."></textarea>
+                </div>
+            </div>
+
+            <!-- Step 2: Upload Data -->
+            <div class="step-content" id="step-2">
+                <h2 class="step-title">Upload Match Data</h2>
+                
+                <div class="upload-area" id="drop-area">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <div class="upload-text">
+                        <h3>Drag & Drop Files Here</h3>
+                        <p>Upload match videos, CSV files, Excel spreadsheets, or JSON data</p>
+                        <button class="btn btn-primary" onclick="document.getElementById('file-input').click()">
+                            <i class="fas fa-folder-open"></i> Browse Files
+                        </button>
+                        <input type="file" id="file-input" multiple style="display: none;">
+                    </div>
+                    
+                    <div class="file-types">
+                        <span class="file-type-tag">CSV (.csv)</span>
+                        <span class="file-type-tag">Excel (.xlsx, .xls)</span>
+                        <span class="file-type-tag">JSON (.json)</span>
+                        <span class="file-type-tag">Video (.mp4, .mov)</span>
+                        <span class="file-type-tag">PDF (.pdf)</span>
+                    </div>
+                </div>
+
+                <!-- File List -->
+                <div class="file-list">
+                    <h3>Uploaded Files</h3>
+                    <div id="file-list-container">
+                        <div class="no-files" style="text-align: center; color: var(--medium-gray); padding: 2rem;">
+                            <i class="fas fa-file" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                            <p>No files uploaded yet. Drag and drop files or click "Browse Files" above.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Match Details -->
+                <h3 style="margin: 2rem 0 1rem;">Match Details (Up to 6 Matches)</h3>
+                <div class="match-cards" id="match-cards">
+                    <!-- Match cards will be generated here -->
+                </div>
+            </div>
+
+            <!-- Step 3: Review -->
+            <div class="step-content" id="step-3">
+                <h2 class="step-title">Review & Confirm</h2>
+                
+                <div style="background-color: var(--light-bg); padding: 2rem; border-radius: 8px; margin-bottom: 2rem;">
+                    <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">Analysis Summary</h3>
+                    
+                    <div id="review-summary">
+                        <!-- Summary will be populated here -->
+                    </div>
+                </div>
+
+                <div style="background-color: #FEF3C7; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #F59E0B;">
+                    <h4 style="color: #92400E; margin-bottom: 0.5rem;">
+                        <i class="fas fa-exclamation-triangle"></i> Important Notes
+                    </h4>
+                    <ul style="color: #92400E; padding-left: 1.5rem;">
+                        <li>Analysis processing typically takes 5-10 minutes</li>
+                        <li>Ensure all uploaded files are from the same team</li>
+                        <li>For best results, include at least 4 full matches</li>
+                        <li>You will receive an email when analysis is complete</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Step 4: Processing -->
+            <div class="step-content" id="step-4">
+                <h2 class="step-title">Processing Analysis</h2>
+                
+                <div style="text-align: center; padding: 3rem 2rem;">
+                    <div class="processing-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    
+                    <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">Analyzing Your Data</h3>
+                    <p style="color: var(--medium-gray); margin-bottom: 2rem;">
+                        Our AI engine is processing your uploaded data. This may take a few minutes depending on the amount of data.
+                    </p>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    
+                    <div id="processing-status" style="margin-top: 1rem; color: var(--medium-gray);">
+                        Initializing analysis engine...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wizard Navigation -->
+            <div class="wizard-navigation">
+                <button class="btn" id="prev-btn" disabled>
+                    <i class="fas fa-arrow-left"></i> Previous
+                </button>
+                
+                <div>
+                    <span id="step-counter">Step 1 of 4</span>
+                </div>
+                
+                <button class="btn btn-green" id="next-btn">
+                    Next <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Processing Overlay -->
+    <div class="processing-overlay" id="processing-overlay">
+        <div class="processing-modal">
+            <div class="processing-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+            
+            <h2 style="color: var(--primary-blue); margin-bottom: 1rem;">Analysis Complete!</h2>
+            <p style="color: var(--medium-gray); margin-bottom: 2rem;">
+                Your team analysis has been processed successfully. You can now view the results.
+            </p>
+            
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <a href="results.html" class="btn btn-green">
+                    <i class="fas fa-chart-bar"></i> View Results
+                </a>
+                <button class="btn" onclick="closeProcessingOverlay()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>FootIntel Pro</h3>
+                    <p>Professional football analysis platform</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Support</a></li>
+                        <li><a href="#">File Format Guide</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2024 FootIntel Pro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Upload wizard functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            let currentStep = 1;
+            const totalSteps = 4;
+            const uploadedFiles = [];
+            
+            // DOM Elements
+            const stepElements = document.querySelectorAll('.wizard-step');
+            const stepContents = document.querySelectorAll('.step-content');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const stepCounter = document.getElementById('step-counter');
+            const dropArea = document.getElementById('drop-area');
+            const fileInput = document.getElementById('file-input');
+            const fileListContainer = document.getElementById('file-list-container');
+            const matchCards = document.getElementById('match-cards');
+            const reviewSummary = document.getElementById('review-summary');
+            const progressFill = document.getElementById('progress-fill');
+            const processingStatus = document.getElementById('processing-status');
+            const processingOverlay = document.getElementById('processing-overlay');
+            
+            // Step Navigation
+            function updateWizard() {
+                // Update step indicators
+                stepElements.forEach((step, index) => {
+                    step.classList.remove('active', 'completed');
+                    if (index + 1 < currentStep) {
+                        step.classList.add('completed');
+                    } else if (index + 1 === currentStep) {
+                        step.classList.add('active');
+                    }
+                });
+                
+                // Update step content
+                stepContents.forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(`step-${currentStep}`).classList.add('active');
+                
+                // Update buttons
+                prevBtn.disabled = currentStep === 1;
+                nextBtn.disabled = false;
+                
+                if (currentStep === totalSteps) {
+                    nextBtn.innerHTML = 'Process Analysis <i class="fas fa-play"></i>';
+                    nextBtn.classList.add('btn-green');
+                } else if (currentStep === totalSteps - 1) {
+                    updateReviewSummary();
+                    nextBtn.innerHTML = 'Start Analysis <i class="fas fa-play"></i>';
+                } else {
+                    nextBtn.innerHTML = 'Next <i class="fas fa-arrow-right"></i>';
+                }
+                
+                // Update step counter
+                stepCounter.textContent = `Step ${currentStep} of ${totalSteps}`;
+            }
+            
+            // Next button click
+            nextBtn.addEventListener('click', function() {
+                if (currentStep === totalSteps) {
+                    startProcessing();
+                } else {
+                    currentStep++;
+                    updateWizard();
+                }
+            });
+            
+            // Previous button click
+            prevBtn.addEventListener('click', function() {
+                if (currentStep > 1) {
+                    currentStep--;
+                    updateWizard();
+                }
+            });
+            
+            // File Upload Functionality
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                dropArea.classList.add('drag-over');
+            }
+            
+            function unhighlight() {
+                dropArea.classList.remove('drag-over');
+            }
+            
+            dropArea.addEventListener('drop', handleDrop, false);
+            fileInput.addEventListener('change', handleFiles, false);
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                handleFiles({ target: { files } });
+            }
+            
+            function handleFiles(e) {
+                const files = [...e.target.files];
+                files.forEach(file => {
+                    if (!uploadedFiles.some(f => f.name === file.name)) {
+                        uploadedFiles.push({
+                            name: file.name,
+                            size: formatFileSize(file.size),
+                            type: getFileType(file.name)
+                        });
+                    }
+                });
+                updateFileList();
+                updateMatchCards();
+            }
+            
+            function updateFileList() {
+                if (uploadedFiles.length === 0) {
+                    fileListContainer.innerHTML = `
+                        <div class="no-files" style="text-align: center; color: var(--medium-gray); padding: 2rem;">
+                            <i class="fas fa-file" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                            <p>No files uploaded yet. Drag and drop files or click "Browse Files" above.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                fileListContainer.innerHTML = uploadedFiles.map((file, index) => `
+                    <div class="file-item">
+                        <div class="file-info">
+                            <div class="file-icon">
+                                <i class="fas fa-${getFileIcon(file.type)}"></i>
+                            </div>
+                            <div>
+                                <div class="file-name">${file.name}</div>
+                                <div class="file-size">${file.size} • ${file.type}</div>
+                            </div>
+                        </div>
+                        <div class="file-actions">
+                            <span class="remove-file" onclick="removeFile(${index})">
+                                <i class="fas fa-times"></i>
+                            </span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            function updateMatchCards() {
+                // Create 6 match cards for data entry
+                matchCards.innerHTML = '';
+                for (let i = 1; i <= 6; i++) {
+                    matchCards.innerHTML += `
+                        <div class="match-card">
+                            <h4>Match ${i}</h4>
+                            <div class="form-group">
+                                <label>Opponent</label>
+                                <input type="text" class="form-control match-opponent" placeholder="Opponent team name">
+                            </div>
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="date" class="form-control match-date">
+                            </div>
+                            <div class="form-group">
+                                <label>Result</label>
+                                <input type="text" class="form-control match-result" placeholder="e.g., 2-1 (W)">
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            
+            function updateReviewSummary() {
+                const teamName = document.getElementById('team-name').value || 'Not specified';
+                const teamType = document.getElementById('team-type').value || 'Not specified';
+                const league = document.getElementById('league').value || 'Not specified';
+                
+                reviewSummary.innerHTML = `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <strong>Team Name:</strong><br>
+                            ${teamName}
+                        </div>
+                        <div>
+                            <strong>Team Type:</strong><br>
+                            ${teamType}
+                        </div>
+                        <div>
+                            <strong>League:</strong><br>
+                            ${league}
+                        </div>
+                        <div>
+                            <strong>Files Uploaded:</strong><br>
+                            ${uploadedFiles.length} files
+                        </div>
+                    </div>
+                `;
+            }
+            
+            function startProcessing() {
+                // Show processing in step 4
+                currentStep = 4;
+                updateWizard();
+                
+                // Simulate processing
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 5;
+                    progressFill.style.width = `${progress}%`;
+                    
+                    if (progress <= 20) {
+                        processingStatus.textContent = 'Parsing uploaded files...';
+                    } else if (progress <= 40) {
+                        processingStatus.textContent = 'Extracting match events...';
+                    } else if (progress <= 60) {
+                        processingStatus.textContent = 'Analyzing team patterns...';
+                    } else if (progress <= 80) {
+                        processingStatus.textContent = 'Identifying key players...';
+                    } else if (progress <= 95) {
+                        processingStatus.textContent = 'Generating tactical recommendations...';
+                    } else {
+                        processingStatus.textContent = 'Finalizing analysis...';
+                    }
+                    
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        setTimeout(() => {
+                            processingOverlay.classList.add('active');
+                        }, 1000);
+                    }
+                }, 200);
+            }
+            
+            // Helper Functions
+            window.removeFile = function(index) {
+                uploadedFiles.splice(index, 1);
+                updateFileList();
+            };
+            
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+            
+            function getFileType(filename) {
+                const ext = filename.split('.').pop().toLowerCase();
+                if (['csv', 'xls', 'xlsx'].includes(ext)) return 'Spreadsheet';
+                if (['json'].includes(ext)) return 'Data File';
+                if (['mp4', 'mov', 'avi'].includes(ext)) return 'Video';
+                if (['pdf'].includes(ext)) return 'Document';
+                return 'Other';
+            }
+            
+            function getFileIcon(fileType) {
+                switch(fileType) {
+                    case 'Spreadsheet': return 'file-excel';
+                    case 'Data File': return 'file-code';
+                    case 'Video': return 'file-video';
+                    case 'Document': return 'file-pdf';
+                    default: return 'file';
+                }
+            }
+            
+            window.closeProcessingOverlay = function() {
+                processingOverlay.classList.remove('active');
+            };
+            
+            // Initialize wizard
+            updateWizard();
+            updateMatchCards();
+        });
+    </script>
+</body>
+</html>
