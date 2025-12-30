@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Generator | FootIntel Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== GLOBAL STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary-blue: #1E3A8A;
+            --secondary-blue: #3B82F6;
+            --football-green: #059669;
+            --accent-red: #DC2626;
+            --light-bg: #F9FAFB;
+            --dark-text: #111827;
+            --medium-gray: #6B7280;
+            --light-gray: #E5E7EB;
+            --white: #FFFFFF;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--football-green);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-text);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        .nav-links a.active {
+            color: var(--football-green);
+            font-weight: 600;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        .btn-green {
+            background-color: var(--football-green);
+            color: white;
+        }
+
+        .btn-green:hover {
+            background-color: #047857;
+        }
+
+        /* ===== REPORTS PAGE ===== */
+        .reports-container {
+            margin-top: 100px;
+            padding: 2rem 0;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+        }
+
+        .page-subtitle {
+            color: var(--medium-gray);
+            margin-top: 0.5rem;
+        }
+
+        /* ===== REPORT BUILDER ===== */
+        .report-builder {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        /* Sidebar - Report Options */
+        .report-options {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+        }
+
+        .options-section {
+            margin-bottom: 2rem;
+        }
+
+        .options-section h3 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .option-group {
+            margin-bottom: 1rem;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .option-label span {
+            font-weight: 500;
+        }
+
+        .option-label .page-count {
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+        }
+
+        .checkbox-container {
+            display: block;
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .checkbox-container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 22px;
+            width: 22px;
+            background-color: var(--light-gray);
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .checkbox-container:hover input ~ .checkmark {
+            background-color: #ccc;
+        }
+
+        .checkbox-container input:checked ~ .checkmark {
+            background-color: var(--football-green);
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .checkbox-container input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        .checkbox-container .checkmark:after {
+            left: 8px;
+            top: 4px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            transform: rotate(45deg);
+        }
+
+        /* Preview Area */
+        .report-preview {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            min-height: 800px;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .preview-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .preview-scale {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .scale-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            border: 1px solid var(--light-gray);
+            background-color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .scale-btn:hover {
+            background-color: var(--light-bg);
+        }
+
+        /* Preview Content */
+        .preview-content {
+            background-color: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 3rem;
+            min-height: 700px;
+            position: relative;
+        }
+
+        .preview-page {
+            position: relative;
+            min-height: 700px;
+        }
+
+        .page-number {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Report Sections */
+        .report-section {
+            margin-bottom: 3rem;
+            page-break-inside: avoid;
+        }
+
+        .section-header {
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-blue);
+        }
+
+        .executive-summary {
+            background-color: #F0F9FF;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary-blue);
+            margin-bottom: 2rem;
+        }
+
+        .summary-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .summary-point {
+            text-align: center;
+            padding: 1rem;
+            background-color: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .summary-point .value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            margin-bottom: 0.3rem;
+        }
+
+        .summary-point .label {
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Player Profiles */
+        .player-profiles {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .player-profile {
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            padding: 1.5rem;
+            page-break-inside: avoid;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .player-avatar {
+            width: 50px;
+            height: 50px;
+            background-color: var(--light-gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        .player-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.3rem 0;
+            border-bottom: 1px dashed var(--light-gray);
+        }
+
+        /* Tactical Graphics */
+        .tactical-graphics {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 2rem;
+            background-color: var(--light-bg);
+            border-radius: 8px;
+        }
+
+        .pitch-diagram {
+            width: 100%;
+            max-width: 600px;
+            height: 400px;
+            margin: 0 auto;
+            background-color: var(--football-green);
+            border-radius: 4px;
+            position: relative;
+            background-image: 
+                linear-gradient(to right, white 1px, transparent 1px),
+                linear-gradient(to bottom, white 1px, transparent 1px);
+            background-size: 10% 10%;
+            border: 2px solid white;
+        }
+
+        /* Footer Actions */
+        .report-footer {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .export-options {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .export-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            background-color: var(--white);
+            border: 2px solid var(--light-gray);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .export-btn:hover {
+            border-color: var(--primary-blue);
+            background-color: var(--light-bg);
+        }
+
+        .export-btn.pdf {
+            border-color: var(--accent-red);
+            color: var(--accent-red);
+        }
+
+        .export-btn.pdf:hover {
+            background-color: #FEF2F2;
+        }
+
+        .export-btn.pptx {
+            border-color: var(--warning-yellow);
+            color: var(--warning-yellow);
+        }
+
+        .export-btn.pptx:hover {
+            background-color: #FFFBEB;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #d1d5db;
+            text-decoration: none;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #d1d5db;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .report-builder {
+                grid-template-columns: 1fr;
+            }
+            
+            .report-options {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .preview-content {
+                padding: 1.5rem;
+            }
+            
+            .summary-points {
+                grid-template-columns: 1fr;
+            }
+            
+            .player-profiles {
+                grid-template-columns: 1fr;
+            }
+            
+            .report-footer {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .export-options {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        @media print {
+            header, .report-options, .preview-header, .report-footer, footer {
+                display: none !important;
+            }
+            
+            .reports-container {
+                margin-top: 0;
+                padding: 0;
+            }
+            
+            .preview-content {
+                box-shadow: none;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <i class="fas fa-futbol"></i>
+                    FootIntel Pro
+                </a>
+                
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="upload.html">Analyze</a></li>
+                    <li><a href="database.html">Database</a></li>
+                    <li><a href="reports.html" class="active">Reports</a></li>
+                </ul>
+                
+                <div class="user-menu">
+                    <a href="dashboard.html" class="btn btn-primary">Back to Dashboard</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Reports Content -->
+    <div class="container reports-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h1>Report Generator</h1>
+                <p class="page-subtitle">Customize and export analysis reports for your team</p>
+            </div>
+            <div>
+                <a href="results.html" class="btn">
+                    <i class="fas fa-arrow-left"></i> Back to Analysis
+                </a>
+            </div>
+        </div>
+
+        <!-- Report Builder -->
+        <div class="report-builder">
+            <!-- Report Options Sidebar -->
+            <div class="report-options">
+                <div class="options-section">
+                    <h3>Team Information</h3>
+                    <div class="form-group">
+                        <label for="report-team">Team Analyzed</label>
+                        <select id="report-team" class="form-control" style="width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid var(--light-gray);">
+                            <option value="fcb-u19">FC Barcelona U19</option>
+                            <option value="rm-academy">Real Madrid Academy</option>
+                            <option value="ajax-youth">Ajax Youth Team</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" style="margin-top: 1rem;">
+                        <label for="report-title">Report Title</label>
+                        <input type="text" id="report-title" class="form-control" value="FC Barcelona U19 - Tactical Analysis Report" style="width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid var(--light-gray);">
+                    </div>
+                </div>
+
+                <div class="options-section">
+                    <h3>Report Sections</h3>
+                    
+                    <div class="option-group">
+                        <div class="option-label">
+                            <span>Executive Summary</span>
+                            <span class="page-count">1 page</span>
+                        </div>
+                        <label class="checkbox-container">
+                            <input type="checkbox" checked="checked">
+                            <span class="checkmark"></span>
+                            Include executive summary
+                        </label>
+                    </div>
+                    
+                    <div class="option-group">
+                        <div class="option-label">
+                            <span>Team Analysis</span>
+                            <span class="page-count">2-3 pages</span>
+                        </div>
+                        <label class="checkbox-container">
+                            <input type="checkbox" checked="checked">
+                            <span class="checkmark"></span>
+                            Include team analysis
+                        </label>
+                    </div>
+                    
+                    <div class="option-group">
+                        <div class="option-label">
+                            <span>Player Profiles</span>
+                            <span class="page-count">3-5 pages</span>
+                        </div>
+                        <label class="checkbox-container">
+                            <input type="checkbox" checked="checked">
+                            <span class="checkmark"></span>
+                            Include player profiles
+                        </label>
+                    </div>
+                    
+                    <div class="option-group">
+                        <div class="option-label">
+                            <span>Tactical Recommendations</span>
+                            <span class="page-count">2 pages</span>
+                        </div>
+                        <label class="checkbox-container">
+                            <input type="checkbox" checked="checked">
+                            <span class="checkmark"></span>
+                            Include tactical advice
+                        </label>
+                    </div>
+                    
+                    <div class="option-group">
+                        <div class="option-label">
+                            <span>Visualizations</span>
+                            <span class="page-count">1-2 pages</span>
+                        </div>
+                        <label class="checkbox-container">
+                            <input type="checkbox" checked="checked">
+                            <span class="checkmark"></span>
+                            Include charts & diagrams
+                        </label>
+                    </div>
+                    
+                    <div class="option-group">
+                        <div class="option-label">
+                            <span>Appendix</span>
+                            <span class="page-count">1 page</span>
+                        </div>
+                        <label class="checkbox-container">
+                            <input type="checkbox">
+                            <span class="checkmark"></span>
+                            Include data appendix
+                        </label>
+                    </div>
+                </div>
+
+                <div class="options-section">
+                    <h3>Branding</h3>
+                    
+                    <div class="option-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" checked="checked">
+                            <span class="checkmark"></span>
+                            Include your logo
+                        </label>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox">
+                            <span class="checkmark"></span>
+                            Confidential watermark
+                        </label>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" checked="checked">
+                            <span class="checkmark"></span>
+                            Page numbers
+                        </label>
+                    </div>
+                </div>
+
+                <div class="options-section">
+                    <h3>Export Settings</h3>
+                    
+                    <div class="form-group">
+                        <label for="export-format">Format</label>
+                        <select id="export-format" class="form-control" style="width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid var(--light-gray);">
+                            <option value="pdf">PDF Document</option>
+                            <option value="pptx">PowerPoint Presentation</option>
+                            <option value="docx">Word Document</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" style="margin-top: 1rem;">
+                        <label for="page-size">Page Size</label>
+                        <select id="page-size" class="form-control" style="width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid var(--light-gray);">
+                            <option value="a4">A4 (Standard)</option>
+                            <option value="letter">Letter (US)</option>
+                            <option value="a3">A3 (Large)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="btn btn-green" style="width: 100%; margin-top: 1rem;" onclick="generateReport()">
+                    <i class="fas fa-magic"></i> Apply Changes
+                </button>
+            </div>
+
+            <!-- Report Preview -->
+            <div class="report-preview">
+                <div class="preview-header">
+                    <div>
+                        <h3 style="color: var(--primary-blue);">Report Preview</h3>
+                        <p style="color: var(--medium-gray); font-size: 0.9rem;">What your report will look like</p>
+                    </div>
+                    
+                    <div class="preview-controls">
+                        <div class="preview-scale">
+                            <button class="scale-btn" onclick="zoomOut()">-</button>
+                            <span style="min-width: 60px; text-align: center;">100%</span>
+                            <button class="scale-btn" onclick="zoomIn()">+</button>
+                        </div>
+                        <button class="btn" onclick="window.print()">
+                            <i class="fas fa-print"></i> Print Preview
+                        </button>
+                    </div>
+                </div>
+
+                <div class="preview-content" id="previewContent">
+                    <!-- Report Cover Page -->
+                    <div class="report-section">
+                        <div style="text-align: center; padding: 4rem 2rem; border-bottom: 2px solid var(--primary-blue); margin-bottom: 3rem;">
+                            <div style="font-size: 0.9rem; color: var(--medium-gray); margin-bottom: 1rem;">TACTICAL ANALYSIS REPORT</div>
+                            <h1 style="font-size: 2.5rem; color: var(--primary-blue); margin-bottom: 1rem;" id="reportTitleDisplay">
+                                FC Barcelona U19
+                            </h1>
+                            <div style="font-size: 1.2rem; color: var(--dark-text); margin-bottom: 2rem;">
+                                Comprehensive Performance Analysis & Tactical Recommendations
+                            </div>
+                            <div style="color: var(--medium-gray);">
+                                Generated on November 15, 2024 • 6 matches analyzed
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Executive Summary -->
+                    <div class="report-section">
+                        <h2 class="section-header">Executive Summary</h2>
+                        
+                        <div class="executive-summary">
+                            <p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 1rem;">
+                                FC Barcelona U19 exhibits a <strong>possession-based attacking style</strong> with emphasis on vertical passing and high pressing. The team maintains an average of 68% possession per game with 87% passing accuracy, demonstrating excellent ball retention and build-up play.
+                            </p>
+                            
+                            <div class="summary-points">
+                                <div class="summary-point">
+                                    <div class="value">9.2/10</div>
+                                    <div class="label">Most Dangerous Player Impact</div>
+                                </div>
+                                <div class="summary-point">
+                                    <div class="value">68%</div>
+                                    <div class="label">Average Possession</div>
+                                </div>
+                                <div class="summary-point">
+                                    <div class="value">2.1</div>
+                                    <div class="label">Expected Goals per Game</div>
+                                </div>
+                                <div class="summary-point">
+                                    <div class="value">6.8</div>
+                                    <div class="label">Pressing Intensity (PPDA)</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 2rem;">
+                            <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">Key Findings</h3>
+                            <ul style="padding-left: 1.5rem; color: var(--dark-text);">
+                                <li style="margin-bottom: 0.5rem;">Primary attacking channel is through left flank (42% of attacks)</li>
+                                <li style="margin-bottom: 0.5rem;">Most vulnerable to quick counter-attacks, especially on left side</li>
+                                <li style="margin-bottom: 0.5rem;">Player #10 (Pablo Gavi) is the creative hub with 7 assists in 6 games</li>
+                                <li>Defensive aerial duel win rate is only 32% in defensive third</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Player Profiles -->
+                    <div class="report-section">
+                        <h2 class="section-header">Key Player Profiles</h2>
+                        
+                        <div class="player-profiles">
+                            <div class="player-profile">
+                                <div class="profile-header">
+                                    <div class="player-avatar">#10</div>
+                                    <div>
+                                        <h4 style="color: var(--primary-blue); margin-bottom: 0.2rem;">Pablo Gavi</h4>
+                                        <div style="color: var(--medium-gray); font-size: 0.9rem;">Central Midfielder</div>
+                                    </div>
+                                </div>
+                                
+                                <div style="margin: 1rem 0;">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <span style="font-weight: 600;">Impact Score:</span>
+                                        <span style="color: var(--football-green); font-weight: 600;">9.2/10</span>
+                                    </div>
+                                    <p style="font-size: 0.9rem; color: var(--dark-text);">
+                                        Creative hub of the team. Exceptional vision and passing range. Creates 4.1 chances per game.
+                                    </p>
+                                </div>
+                                
+                                <div class="player-stats">
+                                    <div class="stat">
+                                        <span>Goals</span>
+                                        <span>5</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span>Assists</span>
+                                        <span>7</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span>Pass Accuracy</span>
+                                        <span>89%</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span>Key Passes</span>
+                                        <span>24</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="player-profile">
+                                <div class="profile-header">
+                                    <div class="player-avatar">#3</div>
+                                    <div>
+                                        <h4 style="color: var(--primary-blue); margin-bottom: 0.2rem;">Alejandro Balde</h4>
+                                        <div style="color: var(--medium-gray); font-size: 0.9rem;">Left Back</div>
+                                    </div>
+                                </div>
+                                
+                                <div style="margin: 1rem 0;">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <span style="font-weight: 600;">Impact Score:</span>
+                                        <span style="color: var(--football-green); font-weight: 600;">8.5/10</span>
+                                    </div>
+                                    <p style="font-size: 0.9rem; color: var(--dark-text);">
+                                        Offensive-minded fullback. Provides width and crossing threat but leaves space behind.
+                                    </p>
+                                </div>
+                                
+                                <div class="player-stats">
+                                    <div class="stat">
+                                        <span>Assists</span>
+                                        <span>4</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span>Cross Accuracy</span>
+                                        <span>78%</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span>Tackles</span>
+                                        <span>32</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span>Recoveries</span>
+                                        <span>45</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tactical Recommendations -->
+                    <div class="report-section">
+                        <h2 class="section-header">Tactical Recommendations</h2>
+                        
+                        <div style="background-color: #F0FDF4; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--football-green); margin-bottom: 2rem;">
+                            <h3 style="color: var(--football-green); margin-bottom: 1rem;">Primary Strategy</h3>
+                            <p style="margin-bottom: 1rem;">Exploit the space behind their attacking left-back through quick transitions and targeted attacks on the right flank.</p>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+                                <div style="padding: 1rem; background-color: white; border-radius: 6px;">
+                                    <div style="font-weight: 600; color: var(--primary-blue); margin-bottom: 0.3rem;">Formation</div>
+                                    <div>4-2-3-1</div>
+                                </div>
+                                <div style="padding: 1rem; background-color: white; border-radius: 6px;">
+                                    <div style="font-weight: 600; color: var(--primary-blue); margin-bottom: 0.3rem;">Key Matchup</div>
+                                    <div>RW vs LB (#3)</div>
+                                </div>
+                                <div style="padding: 1rem; background-color: white; border-radius: 6px;">
+                                    <div style="font-weight: 600; color: var(--primary-blue); margin-bottom: 0.3rem;">Focus Area</div>
+                                    <div>Aerial attacks</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tactical-graphics">
+                            <h3 style="color: var(--primary-blue); margin-bottom: 1.5rem;">Recommended Defensive Setup</h3>
+                            <div class="pitch-diagram">
+                                <!-- Pitch diagram would go here -->
+                                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; text-align: center;">
+                                    <i class="fas fa-project-diagram" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                                    <div>Defensive Formation Diagram</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page Number -->
+                    <div class="page-number">Page 1 of 4</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Footer -->
+        <div class="report-footer">
+            <div>
+                <strong>Estimated pages:</strong> 8-12 pages
+            </div>
+            
+            <div class="export-options">
+                <button class="export-btn pdf" onclick="exportPDF()">
+                    <i class="fas fa-file-pdf"></i> Export as PDF
+                </button>
+                <button class="export-btn pptx" onclick="exportPPTX()">
+                    <i class="fas fa-file-powerpoint"></i> Export as PowerPoint
+                </button>
+                <button class="btn btn-primary" onclick="shareReport()">
+                    <i class="fas fa-share"></i> Share Report
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>FootIntel Pro</h3>
+                    <p>Professional football analysis platform</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Actions</h3>
+                    <ul class="footer-links">
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="upload.html">New Analysis</a></li>
+                        <li><a href="database.html">Team Database</a></li>
+                        <li><a href="compare.html">Compare Teams</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Report Guide</a></li>
+                        <li><a href="#">Export Formats</a></li>
+                        <li><a href="#">Contact Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2024 FootIntel Pro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let zoomLevel = 1;
+            
+            // Update report title
+            const titleInput = document.getElementById('report-title');
+            const titleDisplay = document.getElementById('reportTitleDisplay');
+            
+            titleInput.addEventListener('input', function() {
+                titleDisplay.textContent = this.value;
+            });
+            
+            // Checkbox functionality
+            document.querySelectorAll('.checkbox-container input').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const section = this.closest('.option-group').querySelector('.option-label span').textContent;
+                    console.log(`${section}: ${this.checked ? 'Included' : 'Excluded'}`);
+                });
+            });
+            
+            // Team selection
+            document.getElementById('report-team').addEventListener('change', function() {
+                const team = this.options[this.selectedIndex].text;
+                titleInput.value = `${team} - Tactical Analysis Report`;
+                titleDisplay.textContent = `${team} - Tactical Analysis Report`;
+            });
+        });
+        
+        // Zoom functions
+        function zoomIn() {
+            const preview = document.getElementById('previewContent');
+            zoomLevel = Math.min(zoomLevel + 0.1, 2);
+            preview.style.transform = `scale(${zoomLevel})`;
+            preview.style.transformOrigin = 'top left';
+            updateZoomDisplay();
+        }
+        
+        function zoomOut() {
+            const preview = document.getElementById('previewContent');
+            zoomLevel = Math.max(zoomLevel - 0.1, 0.5);
+            preview.style.transform = `scale(${zoomLevel})`;
+            preview.style.transformOrigin = 'top left';
+            updateZoomDisplay();
+        }
+        
+        function updateZoomDisplay() {
+            document.querySelector('.preview-scale span').textContent = `${Math.round(zoomLevel * 100)}%`;
+        }
+        
+        // Export functions
+        function exportPDF() {
+            // In a real app, this would generate a PDF
+            alert('PDF generation would start here. In a real application, this would:\n1. Collect all report data\n2. Generate PDF using a library like jsPDF\n3. Trigger download');
+            
+            // Simulate download
+            const btn = document.querySelector('.export-btn.pdf');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                alert('PDF generated successfully! Download starting...');
+                // window.location.href = '/download/report.pdf'; // Actual download link
+            }, 2000);
+        }
+        
+        function exportPPTX() {
+            alert('PowerPoint generation would start here. This would typically involve server-side processing.');
+        }
+        
+        function shareReport() {
+            alert('Share functionality would open a modal with sharing options:\n- Email recipients\n- Download link\n- Team collaboration');
+        }
+        
+        function generateReport() {
+            const btn = document.querySelector('.btn-green');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+            btn.disabled = true;
+            
+            // Simulate report generation
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                alert('Report preview updated with selected options!');
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
