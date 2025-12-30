@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare Teams | FootIntel Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== GLOBAL STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary-blue: #1E3A8A;
+            --secondary-blue: #3B82F6;
+            --football-green: #059669;
+            --accent-red: #DC2626;
+            --light-bg: #F9FAFB;
+            --dark-text: #111827;
+            --medium-gray: #6B7280;
+            --light-gray: #E5E7EB;
+            --white: #FFFFFF;
+            --team1-color: #3B82F6;
+            --team2-color: #059669;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--football-green);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-text);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        .nav-links a.active {
+            color: var(--football-green);
+            font-weight: 600;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        .btn-green {
+            background-color: var(--football-green);
+            color: white;
+        }
+
+        .btn-green:hover {
+            background-color: #047857;
+        }
+
+        /* ===== COMPARISON PAGE ===== */
+        .comparison-container {
+            margin-top: 100px;
+            padding: 2rem 0;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+        }
+
+        .page-subtitle {
+            color: var(--medium-gray);
+            margin-top: 0.5rem;
+        }
+
+        /* ===== TEAM SELECTION ===== */
+        .team-selection {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+
+        .selection-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .vs-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            margin: 0 1rem;
+        }
+
+        .vs-circle {
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-blue);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .team-selector {
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .selector-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .team-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .team1-color {
+            background-color: var(--team1-color);
+        }
+
+        .team2-color {
+            background-color: var(--team2-color);
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.9rem 1rem 0.9rem 3rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--medium-gray);
+        }
+
+        .team-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+        }
+
+        .team-item {
+            padding: 1rem;
+            border-bottom: 1px solid var(--light-gray);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .team-item:hover {
+            background-color: var(--light-bg);
+        }
+
+        .team-item.selected {
+            background-color: #F0F9FF;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .team-item-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-logo-small {
+            width: 40px;
+            height: 40px;
+            background-color: var(--light-gray);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        /* ===== COMPARISON GRID ===== */
+        .comparison-tabs {
+            display: flex;
+            background-color: var(--white);
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .comparison-tab {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            background-color: var(--white);
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--medium-gray);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .comparison-tab:hover {
+            background-color: var(--light-bg);
+        }
+
+        .comparison-tab.active {
+            color: var(--primary-blue);
+            border-bottom-color: var(--football-green);
+        }
+
+        .comparison-content {
+            display: none;
+            background-color: var(--white);
+            border-radius: 0 0 12px 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .comparison-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== OVERVIEW COMPARISON ===== */
+        .overview-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .team-overview {
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 2px solid var(--light-gray);
+        }
+
+        .team-overview.team1 {
+            border-color: var(--team1-color);
+        }
+
+        .team-overview.team2 {
+            border-color: var(--team2-color);
+        }
+
+        .team-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .team-name-large {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .team1-name {
+            color: var(--team1-color);
+        }
+
+        .team2-name {
+            color: var(--team2-color);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .metric-item {
+            text-align: center;
+            padding: 1rem;
+            background-color: var(--light-bg);
+            border-radius: 6px;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 0.3rem;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: var(--medium-gray);
+        }
+
+        .style-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .style-tag {
+            background-color: var(--light-bg);
+            color: var(--medium-gray);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        /* ===== RADAR CHART ===== */
+        .radar-section {
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .radar-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            position: relative;
+        }
+
+        .radar-chart {
+            width: 100%;
+            height: 400px;
+            background-color: var(--light-bg);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .radar-axis {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: var(--medium-gray);
+        }
+
+        .radar-axis i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* ===== HEAD-TO-HEAD COMPARISON ===== */
+        .head-to-head {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .comparison-item {
+            background-color: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .comparison-title {
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .comparison-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .bar-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .bar-label {
+            min-width: 120px;
+            font-size: 0.9rem;
+            color: var(--dark-text);
+        }
+
+        .bar-container {
+            flex: 1;
+            height: 8px;
+            background-color: var(--light-gray);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bar-fill {
+            height: 100%;
+            position: absolute;
+            top: 0;
+        }
+
+        .bar-value {
+            min-width: 40px;
+            text-align: right;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .team1-bar {
+            background-color: var(--team1-color);
+            left: 0;
+        }
+
+        .team2-bar {
+            background-color: var(--team2-color);
+            right: 0;
+        }
+
+        /* ===== TACTICAL MATCHUP ===== */
+        .matchup-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .matchup-card {
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--football-green);
+        }
+
+        .matchup-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .matchup-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--football-green);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .matchup-points {
+            list-style: none;
+        }
+
+        .matchup-points li {
+            padding: 0.8rem 0;
+            border-bottom: 1px dashed var(--light-gray);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .matchup-points li:last-child {
+            border-bottom: none;
+        }
+
+        .point-icon {
+            color: var(--football-green);
+            margin-top: 0.2rem;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #d1d5db;
+            text-decoration: none;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #d1d5db;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .vs-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .team-selector {
+                max-width: 100%;
+            }
+            
+            .overview-comparison {
+                grid-template-columns: 1fr;
+            }
+            
+            .head-to-head {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .comparison-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .comparison-tab {
+                flex: 1 0 50%;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .team-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .matchup-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <i class="fas fa-futbol"></i>
+                    FootIntel Pro
+                </a>
+                
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="upload.html">Analyze</a></li>
+                    <li><a href="database.html">Database</a></li>
+                    <li><a href="compare.html" class="active">Compare</a></li>
+                </ul>
+                
+                <div class="user-menu">
+                    <a href="dashboard.html" class="btn btn-primary">Back to Dashboard</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Comparison Content -->
+    <div class="container comparison-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h1>Team Comparison</h1>
+                <p class="page-subtitle">Side-by-side analysis of two teams</p>
+            </div>
+            <div>
+                <button class="btn btn-green" onclick="exportComparison()">
+                    <i class="fas fa-download"></i> Export Comparison
+                </button>
+            </div>
+        </div>
+
+        <!-- Team Selection -->
+        <div class="team-selection">
+            <div class="selection-header">
+                <h3 style="color: var(--primary-blue);">Select Teams to Compare</h3>
+                <button class="btn" onclick="swapTeams()">
+                    <i class="fas fa-exchange-alt"></i> Swap Teams
+                </button>
+            </div>
+            
+            <div class="vs-container">
+                <!-- Team 1 Selector -->
+                <div class="team-selector">
+                    <div class="selector-header">
+                        <div class="team-color team1-color"></div>
+                        <h4>Team 1</h4>
+                    </div>
+                    
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="team1Search" placeholder="Search team 1..." oninput="filterTeamList(1)">
+                    </div>
+                    
+                    <div class="team-list" id="team1List">
+                        <!-- Team list will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="vs-circle">VS</div>
+                
+                <!-- Team 2 Selector -->
+                <div class="team-selector">
+                    <div class="selector-header">
+                        <div class="team-color team2-color"></div>
+                        <h4>Team 2</h4>
+                    </div>
+                    
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="team2Search" placeholder="Search team 2..." oninput="filterTeamList(2)">
+                    </div>
+                    
+                    <div class="team-list" id="team2List">
+                        <!-- Team list will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Tabs -->
+        <div class="comparison-tabs">
+            <button class="comparison-tab active" data-tab="overview">Overview</button>
+            <button class="comparison-tab" data-tab="head2head">Head-to-Head</button>
+            <button class="comparison-tab" data-tab="tactical">Tactical Matchup</button>
+            <button class="comparison-tab" data-tab="players">Key Players</button>
+        </div>
+
+        <!-- Comparison Content -->
+        
+        <!-- Tab 1: Overview -->
+        <div class="comparison-content active" id="overview-content">
+            <div class="overview-comparison">
+                <!-- Team 1 Overview -->
+                <div class="team-overview team1">
+                    <div class="team-header">
+                        <div>
+                            <div class="team-name-large team1-name" id="team1Name">FC Barcelona U19</div>
+                            <div style="color: var(--medium-gray); font-size: 0.9rem;" id="team1League">UEFA Youth League</div>
+                        </div>
+                        <div class="team-logo-small" style="background-color: var(--team1-color); color: white;" id="team1Logo">
+                            FCB
+                        </div>
+                    </div>
+                    
+                    <div class="metrics-grid">
+                        <div class="metric-item">
+                            <div class="metric-value" id="team1Matches">6</div>
+                            <div class="metric-label">Matches</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value" id="team1Possession">68%</div>
+                            <div class="metric-label">Possession</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value" id="team1Danger">9.2</div>
+                            <div class="metric-label">Top Player</div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div style="font-size: 0.9rem; color: var(--medium-gray); margin-bottom: 0.5rem;">Playing Style</div>
+                        <div class="style-tags" id="team1Styles">
+                            <span class="style-tag">Possession</span>
+                            <span class="style-tag">High Press</span>
+                            <span class="style-tag">Attacking</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team 2 Overview -->
+                <div class="team-overview team2">
+                    <div class="team-header">
+                        <div>
+                            <div class="team-name-large team2-name" id="team2Name">Real Madrid Academy</div>
+                            <div style="color: var(--medium-gray); font-size: 0.9rem;" id="team2League">Domestic Youth League</div>
+                        </div>
+                        <div class="team-logo-small" style="background-color: var(--team2-color); color: white;" id="team2Logo">
+                            RMA
+                        </div>
+                    </div>
+                    
+                    <div class="metrics-grid">
+                        <div class="metric-item">
+                            <div class="metric-value" id="team2Matches">5</div>
+                            <div class="metric-label">Matches</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value" id="team2Possession">52%</div>
+                            <div class="metric-label">Possession</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value" id="team2Danger">8.8</div>
+                            <div class="metric-label">Top Player</div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div style="font-size: 0.9rem; color: var(--medium-gray); margin-bottom: 0.5rem;">Playing Style</div>
+                        <div class="style-tags" id="team2Styles">
+                            <span class="style-tag">Counter-attack</span>
+                            <span class="style-tag">Direct</span>
+                            <span class="style-tag">Organized</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Radar Chart Section -->
+            <div class="radar-section">
+                <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">Style Comparison</h3>
+                <div class="radar-container">
+                    <div class="radar-chart">
+                        <div class="radar-axis">
+                            <i class="fas fa-chart-radar"></i>
+                            <div>Radar chart visualization</div>
+                            <div style="font-size: 0.9rem; opacity: 0.8;">(Interactive in production)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Head-to-Head -->
+        <div class="comparison-content" id="head2head-content">
+            <div class="head-to-head">
+                <!-- Team 1 Stats -->
+                <div>
+                    <h3 style="color: var(--team1-color); text-align: center; margin-bottom: 1.5rem;" id="team1NameShort">FC Barcelona U19</h3>
+                    
+                    <div class="comparison-item">
+                        <div class="comparison-title">Attacking</div>
+                        <div class="comparison-bars">
+                            <div class="bar-item">
+                                <span class="bar-label">Goals/Game</span>
+                                <div class="bar-container">
+                                    <div class="bar-fill team1-bar" style="width: 80%"></div>
+                                </div>
+                                <span class="bar-value">2.3</span>
+                            </div>
+                            <div class="bar-item">
+                                <span class="bar-label">Shots/Game</span>
+                                <div class="bar-container">
+                                    <div class="bar-fill team1-bar" style="width: 85%"></div>
+                                </div>
+                                <span class="bar-value">14.2</span>
+                            </div>
+                            <div class="bar-item">
+                                <span class="bar-label">xG/Game</span>
+                                <div class="bar-container">
+                                    <div class="bar-fill team1-bar" style="width: 78%"></div>
+                                </div>
+                                <span class="bar-value">2.1</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <div class="comparison-title">Defensive</div>
+                        <div class="comparison-bars">
+                            <div class="bar-item">
+                                <span class="bar-label">Tackles/Game</span>
+                                <div class="bar-container">
+                                    <div class="bar-fill team1-bar" style="width: 65%"></div>
+                                </div>
+                                <span class="bar-value">18.5</span>
+                            </div>
+                            <div class="bar-item">
+                                <span class="bar-label">Interceptions</span>
+                                <div class="bar-container">
+                                    <div class="bar-fill team1-bar" style="width: 72%"></div>
+                                </div>
+                                <span class="bar-value">22.3</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Comparison Center -->
+                <div>
+                    <h3 style="color: var(--primary-blue); text-align: center; margin-bottom: 1.5rem;">Direct Comparison</h3>
+                    
+                    <div class="comparison-item">
+                        <div class="comparison-title">Possession Battle</div>
+                        <div style="text-align: center; margin: 1.5rem 0;">
+                            <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                <span style="font-weight: 600; color: var(--team1-color);">68%</span>
+                                <div style="flex: 1; height: 20px; background: linear-gradient(to right, var(--team1-color) 68%, var(--team2-color) 32%); border-radius: 10px;"></div>
+                                <span style="font-weight: 600; color: var(--team2-color);">52%</span>
+                            </div>
+                            <div style="color: var(--medium-gray); font-size: 0.9rem;">
+                                Barcelona dominates possession (+16%)
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <div class="comparison-title">Key Advantage</div>
+                        <div style="text-align: center; padding: 1rem;">
+                            <div style="color: var(--team1-color); font-weight: 600; margin-bottom: 0.5rem;">
+                                <i class="fas fa-arrow-up"></i> Barcelona: Creative Passing
+                            </div>
+                            <div style="color: var(--team2-color); font-weight: 600;">
+                                <i class="fas fa-arrow-up"></i> Madrid: Counter Attacks
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team 2 Stats -->
+                <div>
+                    <h3 style="color: var(--team2-color); text-align: center; margin-bottom: 1.5rem;" id="team2NameShort">Real Madrid Academy</h3>
+                    
+                    <div class="comparison-item">
+                        <div class="comparison-title">Attacking</div>
+                        <div class="comparison-bars">
+                            <div class="bar-item">
+                                <span class="bar-label">Goals/Game</span>
+                                <div class="bar-container">
+                                    <div class="bar-fill team2-bar" style="width: 75%"></div>
+                                </div>
+                                <span class="bar-value">2.0</span>
+                            </div>
+                            <div class="bar-item">
+                                <span class="bar-label">Shots/Game</span>
+                                <div class="bar-container">
+                                    <div class="bar-fill team2-bar" style="width: 70%"></div>
+                                </div>
+                                <span class="bar-value">11.8</span>
+                            </div>
+                            <div class="bar-item">
+                                <span class="bar-label">xG/Game</span>
+                                <div class="bar-container">
+                                    <div class="bar-fill team2-bar" style="width: 65%"></div>
+                                </div>
+                                <span class="bar-value">1.8</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <div class="comparison-title">Defensive</div>
+                        <div class="comparison-bars">
+                            <div class="bar-item">
+                                <span class="bar-label">Tackles/Game</span>
+                                <div class="bar-container">
+                                    <div class="bar-fill team2-bar" style="width: 80%"></div>
+                                </div>
+                                <span class="bar-value">22.4</span>
+                            </div>
+                            <div class="bar-item">
+                                <span class="bar-label">Interceptions</span>
+                                <div class="bar-container">
+                                    <div class="bar-fill team2-bar" style="width: 85%"></div>
+                                </div>
+                                <span class="bar-value">26.7</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: Tactical Matchup -->
+        <div class="comparison-content" id="tactical-content">
+            <div class="matchup-grid">
+                <div class="matchup-card">
+                    <div class="matchup-header">
+                        <div class="matchup-icon">
+                            <i class="fas fa-chess-board"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--primary-blue);">Formation Matchup</h4>
+                            <div style="color: var(--medium-gray); font-size: 0.9rem;">4-3-3 vs 4-2-3-1</div>
+                        </div>
+                    </div>
+                    
+                    <ul class="matchup-points">
+                        <li>
+                            <i class="fas fa-check-circle point-icon"></i>
+                            <div>
+                                <strong>Barcelona's midfield 3</strong> can overload Madrid's double pivot
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle point-icon"></i>
+                            <div>
+                                <strong>Madrid's attacking midfield</strong> can exploit spaces between lines
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle point-icon"></i>
+                            <div>
+                                <strong>Both teams' full-backs</strong> will push high, leaving space behind
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="matchup-card">
+                    <div class="matchup-header">
+                        <div class="matchup-icon">
+                            <i class="fas fa-crosshairs"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--primary-blue);">Key Battles</h4>
+                            <div style="color: var(--medium-gray); font-size: 0.9rem;">Individual matchups to watch</div>
+                        </div>
+                    </div>
+                    
+                    <ul class="matchup-points">
+                        <li>
+                            <i class="fas fa-user point-icon"></i>
+                            <div>
+                                <strong>Barcelona #10 vs Madrid #6</strong><br>
+                                Creative playmaker vs defensive anchor
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-user point-icon"></i>
+                            <div>
+                                <strong>Madrid RW vs Barcelona LB</strong><br>
+                                Pace vs attacking full-back
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-user point-icon"></i>
+                            <div>
+                                <strong>Aerial duels in midfield</strong><br>
+                                Madrid advantage in physical battles
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="matchup-card">
+                    <div class="matchup-header">
+                        <div class="matchup-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--primary-blue);">Tactical Recommendations</h4>
+                            <div style="color: var(--medium-gray); font-size: 0.9rem;">How each team should approach</div>
+                        </div>
+                    </div>
+                    
+                    <ul class="matchup-points">
+                        <li>
+                            <i class="fas fa-arrow-right point-icon"></i>
+                            <div>
+                                <strong>Barcelona:</strong> Control tempo, exploit width, press high
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-arrow-right point-icon"></i>
+                            <div>
+                                <strong>Madrid:</strong> Quick transitions, target set pieces, stay compact
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-arrow-right point-icon"></i>
+                            <div>
+                                <strong>Both:</strong> Manage full-back positioning carefully
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 4: Key Players -->
+        <div class="comparison-content" id="players-content">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h3 style="color: var(--primary-blue);">Key Player Matchups</h3>
+                <p style="color: var(--medium-gray);">Most influential players from each team</p>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <!-- Team 1 Key Players -->
+                <div>
+                    <h4 style="color: var(--team1-color); margin-bottom: 1.5rem; text-align: center;">Barcelona Key Players</h4>
+                    
+                    <div class="comparison-item" style="margin-bottom: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                            <div class="team-logo-small" style="background-color: var(--team1-color); color: white;">#10</div>
+                            <div>
+                                <div style="font-weight: 600;">Pablo Gavi</div>
+                                <div style="color: var(--medium-gray); font-size: 0.9rem;">Central Midfielder</div>
+                            </div>
+                            <div style="margin-left: auto; color: var(--football-green); font-weight: 600;">9.2</div>
+                        </div>
+                        <div style="color: var(--dark-text); font-size: 0.9rem;">
+                            Creative hub with 7 assists in 6 games. Excellent vision and passing range.
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                            <div class="team-logo-small" style="background-color: var(--team1-color); color: white;">#3</div>
+                            <div>
+                                <div style="font-weight: 600;">Alejandro Balde</div>
+                                <div style="color: var(--medium-gray); font-size: 0.9rem;">Left Back</div>
+                            </div>
+                            <div style="margin-left: auto; color: var(--football-green); font-weight: 600;">8.5</div>
+                        </div>
+                        <div style="color: var(--dark-text); font-size: 0.9rem;">
+                            Attacking full-back with 4 assists. Provides width but leaves space behind.
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team 2 Key Players -->
+                <div>
+                    <h4 style="color: var(--team2-color); margin-bottom: 1.5rem; text-align: center;">Madrid Key Players</h4>
+                    
+                    <div class="comparison-item" style="margin-bottom: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                            <div class="team-logo-small" style="background-color: var(--team2-color); color: white;">#11</div>
+                            <div>
+                                <div style="font-weight: 600;">Rodrygo Jr.</div>
+                                <div style="color: var(--medium-gray); font-size: 0.9rem;">Right Winger</div>
+                            </div>
+                            <div style="margin-left: auto; color: var(--football-green); font-weight: 600;">8.8</div>
+                        </div>
+                        <div style="color: var(--dark-text); font-size: 0.9rem;">
+                            Pace and dribbling threat. 5 goals in 5 games. Key for counter-attacks.
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-item">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                            <div class="team-logo-small" style="background-color: var(--team2-color); color: white;">#5</div>
+                            <div>
+                                <div style="font-weight: 600;">Antonio Rüdiger</div>
+                                <div style="color: var(--medium-gray); font-size: 0.9rem;">Center Back</div>
+                            </div>
+                            <div style="margin-left: auto; color: var(--football-green); font-weight: 600;">8.3</div>
+                        </div>
+                        <div style="color: var(--dark-text); font-size: 0.9rem;">
+                            Physical defender. Wins 78% of aerial duels. Organizes the defense.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>FootIntel Pro</h3>
+                    <p>Professional football analysis platform</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="database.html">Database</a></li>
+                        <li><a href="reports.html">Reports</a></li>
+                        <li><a href="upload.html">New Analysis</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Comparison</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">How to Compare</a></li>
+                        <li><a href="#">Matchup Analysis</a></li>
+                        <li><a href="#">Export Comparisons</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2024 FootIntel Pro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sample team data (same as database page)
+        const teamsData = [
+            {
+                id: 1,
+                name: "FC Barcelona U19",
+                league: "UEFA Youth League",
+                style: ["Possession", "High Press", "Attacking"],
+                matches: 6,
+                avgPossession: 68,
+                dangerPlayer: "Pablo Gavi (9.2)",
+                logo: "FCB",
+                stats: {
+                    goalsPerGame: 2.3,
+                    shotsPerGame: 14.2,
+                    xgPerGame: 2.1,
+                    tacklesPerGame: 18.5,
+                    interceptions: 22.3
+                }
+            },
+            {
+                id: 2,
+                name: "Real Madrid Academy",
+                league: "Domestic Youth League",
+                style: ["Counter-attack", "Direct", "Organized"],
+                matches: 5,
+                avgPossession: 52,
+                dangerPlayer: "Rodrygo Jr. (8.8)",
+                logo: "RMA",
+                stats: {
+                    goalsPerGame: 2.0,
+                    shotsPerGame: 11.8,
+                    xgPerGame: 1.8,
+                    tacklesPerGame: 22.4,
+                    interceptions: 26.7
+                }
+            },
+            {
+                id: 3,
+                name: "Ajax Youth Team",
+                league: "Youth Eredivisie",
+                style: ["Possession", "Developmental", "Pressing"],
+                matches: 6,
+                avgPossession: 65,
+                dangerPlayer: "Brian Brobbey (8.5)",
+                logo: "AJA"
+            },
+            {
+                id: 4,
+                name: "Bayern Munich U19",
+                league: "German Youth League",
+                style: ["Direct", "Pressing", "Attacking"],
+                matches: 5,
+                avgPossession: 58,
+                dangerPlayer: "Jamal Musiala (9.0)",
+                logo: "BAY"
+            }
+        ];
+
+        // Selected teams
+        let selectedTeam1 = teamsData[0];
+        let selectedTeam2 = teamsData[1];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize team lists
+            renderTeamList(1);
+            renderTeamList(2);
+            
+            // Initialize comparison with default teams
+            updateComparison();
+            
+            // Tab switching
+            document.querySelectorAll('.comparison-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs and contents
+                    document.querySelectorAll('.comparison-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.comparison-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Show corresponding content
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-content`).classList.add('active');
+                });
+            });
+        });
+        
+        function renderTeamList(teamNumber) {
+            const teamList = document.getElementById(`team${teamNumber}List`);
+            teamList.innerHTML = '';
+            
+            teamsData.forEach(team => {
+                const teamItem = document.createElement('div');
+                teamItem.className = 'team-item';
+                if ((teamNumber === 1 && team.id === selectedTeam1.id) || 
+                    (teamNumber === 2 && team.id === selectedTeam2.id)) {
+                    teamItem.classList.add('selected');
+                }
+                
+                teamItem.innerHTML = `
+                    <div class="team-item-header">
+                        <div class="team-logo-small">${team.logo}</div>
+                        <div>
+                            <div style="font-weight: 600;">${team.name}</div>
+                            <div style="color: var(--medium-gray); font-size: 0.9rem;">${team.league}</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--medium-gray);">
+                        ${team.style.slice(0, 2).join(' • ')}
+                    </div>
+                `;
+                
+                teamItem.addEventListener('click', () => selectTeam(teamNumber, team));
+                teamList.appendChild(teamItem);
+            });
+        }
+        
+        function filterTeamList(teamNumber) {
+            const searchInput = document.getElementById(`team${teamNumber}Search`);
+            const searchTerm = searchInput.value.toLowerCase();
+            const teamList = document.getElementById(`team${teamNumber}List`);
+            const items = teamList.querySelectorAll('.team-item');
+            
+            items.forEach(item => {
+                const teamName = item.querySelector('.team-item-header div:first-child').textContent.toLowerCase();
+                const league = item.querySelector('.team-item-header div:last-child').textContent.toLowerCase();
+                const styles = item.querySelector('div:last-child').textContent.toLowerCase();
+                
+                const matches = teamName.includes(searchTerm) || 
+                              league.includes(searchTerm) || 
+                              styles.includes(searchTerm);
+                
+                item.style.display = matches ? 'block' : 'none';
+            });
+        }
+        
+        function selectTeam(teamNumber, team) {
+            if (teamNumber === 1) {
+                selectedTeam1 = team;
+            } else {
+                selectedTeam2 = team;
+            }
+            
+            // Update UI
+            renderTeamList(1);
+            renderTeamList(2);
+            updateComparison();
+        }
+        
+        function updateComparison() {
+            // Update overview tab
+            document.getElementById('team1Name').textContent = selectedTeam1.name;
+            document.getElementById('team1League').textContent = selectedTeam1.league;
+            document.getElementById('team1Logo').textContent = selectedTeam1.logo;
+            document.getElementById('team1Matches').textContent = selectedTeam1.matches;
+            document.getElementById('team1Possession').textContent = selectedTeam1.avgPossession + '%';
+            document.getElementById('team1Danger').textContent = selectedTeam1.dangerPlayer.split('(')[1].replace(')', '');
+            
+            document.getElementById('team2Name').textContent = selectedTeam2.name;
+            document.getElementById('team2League').textContent = selectedTeam2.league;
+            document.getElementById('team2Logo').textContent = selectedTeam2.logo;
+            document.getElementById('team2Matches').textContent = selectedTeam2.matches;
+            document.getElementById('team2Possession').textContent = selectedTeam2.avgPossession + '%';
+            document.getElementById('team2Danger').textContent = selectedTeam2.dangerPlayer.split('(')[1].replace(')', '');
+            
+            // Update style tags
+            const team1Styles = document.getElementById('team1Styles');
+            const team2Styles = document.getElementById('team2Styles');
+            team1Styles.innerHTML = selectedTeam1.style.map(tag => `<span class="style-tag">${tag}</span>`).join('');
+            team2Styles.innerHTML = selectedTeam2.style.map(tag => `<span class="style-tag">${tag}</span>`).join('');
+            
+            // Update head-to-head tab
+            document.getElementById('team1NameShort').textContent = selectedTeam1.name;
+            document.getElementById('team2NameShort').textContent = selectedTeam2.name;
+            
+            // Update bar charts if stats exist
+            if (selectedTeam1.stats) {
+                updateBarCharts();
+            }
+        }
+        
+        function updateBarCharts() {
+            // This would update the bar charts based on team stats
+            // For now, we'll just log the update
+            console.log('Updating bar charts for:', selectedTeam1.name, 'vs', selectedTeam2.name);
+        }
+        
+        function swapTeams() {
+            const temp = selectedTeam1;
+            selectedTeam1 = selectedTeam2;
+            selectedTeam2 = temp;
+            
+            // Also swap search inputs
+            const team1Search = document.getElementById('team1Search').value;
+            const team2Search = document.getElementById('team2Search').value;
+            
+            document.getElementById('team1Search').value = team2Search;
+            document.getElementById('team2Search').value = team1Search;
+            
+            // Update UI
+            renderTeamList(1);
+            renderTeamList(2);
+            updateComparison();
+        }
+        
+        function exportComparison() {
+            // In a real app, this would export the comparison
+            const comparisonData = {
+                team1: selectedTeam1,
+                team2: selectedTeam2,
+                generated: new Date().toISOString()
+            };
+            
+            alert(`Exporting comparison between:\n${selectedTeam1.name} vs ${selectedTeam2.name}\n\nWould generate PDF/CSV report.`);
+            
+            // Simulate export
+            const btn = document.querySelector('.btn-green');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Exporting...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                alert('Comparison exported successfully!');
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
