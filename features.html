@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Features | FootIntel Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== GLOBAL STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary-blue: #1E3A8A;
+            --secondary-blue: #3B82F6;
+            --football-green: #059669;
+            --accent-red: #DC2626;
+            --light-bg: #F9FAFB;
+            --dark-text: #111827;
+            --medium-gray: #6B7280;
+            --light-gray: #E5E7EB;
+            --white: #FFFFFF;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--football-green);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-text);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        .nav-links a.active {
+            color: var(--football-green);
+            font-weight: 600;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        /* ===== FEATURES PAGE ===== */
+        .features-container {
+            margin-top: 100px;
+            padding: 2rem 0;
+        }
+
+        /* Hero Section */
+        .features-hero {
+            text-align: center;
+            padding: 4rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .features-hero h1 {
+            font-size: 3.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        .features-hero p {
+            font-size: 1.2rem;
+            color: var(--medium-gray);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Features Navigation */
+        .features-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .feature-tab {
+            padding: 0.8rem 1.5rem;
+            background-color: var(--white);
+            border: 2px solid var(--light-gray);
+            border-radius: 50px;
+            font-weight: 500;
+            color: var(--medium-gray);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feature-tab:hover {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        .feature-tab.active {
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+            color: white;
+        }
+
+        /* Features Content */
+        .features-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .features-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Feature Sections */
+        .feature-section {
+            margin-bottom: 4rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--medium-gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background-color: var(--light-bg);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--football-green);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .feature-card p {
+            color: var(--medium-gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed var(--light-gray);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list i {
+            color: var(--football-green);
+        }
+
+        /* Demo Section */
+        .demo-section {
+            background-color: var(--white);
+            border-radius: 20px;
+            padding: 4rem;
+            margin: 4rem 0;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        .demo-section h2 {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        .demo-section p {
+            color: var(--medium-gray);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .demo-preview {
+            max-width: 800px;
+            margin: 2rem auto;
+            background-color: var(--light-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: var(--medium-gray);
+        }
+
+        .demo-preview i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Use Cases */
+        .use-cases {
+            margin: 4rem 0;
+        }
+
+        .use-case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .use-case-card {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .use-case-icon {
+            width: 70px;
+            height: 70px;
+            background-color: var(--light-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: var(--primary-blue);
+            font-size: 1.8rem;
+        }
+
+        .use-case-card h3 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        .use-case-card p {
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 4rem;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            border-radius: 20px;
+            margin-bottom: 4rem;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 3rem 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #d1d5db;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .demo-section {
+                padding: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .features-hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .features-nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .feature-tab {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .section-header h2,
+            .demo-section h2,
+            .cta-section h2 {
+                font-size: 2rem;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .demo-section {
+                padding: 2rem;
+            }
+            
+            .cta-section {
+                padding: 3rem 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .features-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .feature-card {
+                padding: 1.5rem;
+            }
+            
+            .use-case-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <i class="fas fa-futbol"></i>
+                    FootIntel Pro
+                </a>
+                
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="features.html" class="active">Features</a></li>
+                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="login.html">Login</a></li>
+                </ul>
+                
+                <div class="user-menu">
+                    <a href="signup.html" class="btn btn-primary">Get Started</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Features Content -->
+    <div class="container features-container">
+        <!-- Hero Section -->
+        <div class="features-hero">
+            <h1>Complete Football Intelligence Platform</h1>
+            <p>Everything you need to analyze teams, develop players, and create winning strategies - all in one platform.</p>
+            <a href="signup.html" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                Start Free Trial
+            </a>
+        </div>
+
+        <!-- Features Navigation -->
+        <div class="features-nav">
+            <div class="feature-tab active" data-tab="analysis">
+                <i class="fas fa-chart-bar"></i>
+                Team Analysis
+            </div>
+            <div class="feature-tab" data-tab="players">
+                <i class="fas fa-users"></i>
+                Player Development
+            </div>
+            <div class="feature-tab" data-tab="reports">
+                <i class="fas fa-file-alt"></i>
+                Reports & Visualizations
+            </div>
+            <div class="feature-tab" data-tab="workflow">
+                <i class="fas fa-tasks"></i>
+                Coach Workflow
+            </div>
+        </div>
+
+        <!-- Features Content -->
+        
+        <!-- Tab 1: Team Analysis -->
+        <div class="features-content active" id="analysis-content">
+            <div class="feature-section">
+                <div class="section-header">
+                    <h2>Advanced Team Analysis</h2>
+                    <p>Upload data from 6 matches and get comprehensive insights into any team's playing style, strengths, and weaknesses</p>
+                </div>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3>Style Detection</h3>
+                        <p>Automatically identify playing styles like possession-based, counter-attacking, high-press, or direct football.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Formation patterns</li>
+                            <li><i class="fas fa-check"></i> Tempo analysis</li>
+                            <li><i class="fas fa-check"></i> Pressing intensity</li>
+                            <li><i class="fas fa-check"></i> Build-up patterns</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <h3>Strengths & Weaknesses</h3>
+                        <p>Identify key areas where teams excel or struggle, with specific metrics and actionable insights.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Defensive vulnerabilities</li>
+                            <li><i class="fas fa-check"></i> Attacking patterns</li>
+                            <li><i class="fas fa-check"></i> Set piece effectiveness</li>
+                            <li><i class="fas fa-check"></i> Transition analysis</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <h3>Dangerous Players</h3>
+                        <p>Spot the most influential players with our impact scoring algorithm that combines multiple metrics.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> xG chain involvement</li>
+                            <li><i class="fas fa-check"></i> Chance creation</li>
+                            <li><i class="fas fa-check"></i> Defensive contributions</li>
+                            <li><i class="fas fa-check"></i> Positional influence</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chess-board"></i>
+                        </div>
+                        <h3>Tactical Recommendations</h3>
+                        <p>Get specific game plans and strategies to exploit opponent weaknesses based on their playing patterns.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Formation suggestions</li>
+                            <li><i class="fas fa-check"></i> Key matchups</li>
+                            <li><i class="fas fa-check"></i> Set piece tactics</li>
+                            <li><i class="fas fa-check"></i> In-game adjustments</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Player Development -->
+        <div class="features-content" id="players-content">
+            <div class="feature-section">
+                <div class="section-header">
+                    <h2>Player Development & Scouting</h2>
+                    <p>Track player progress, identify talents, and create personalized development plans</p>
+                </div>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-chart"></i>
+                        </div>
+                        <h3>Performance Tracking</h3>
+                        <p>Monitor player development over time with detailed metrics and progress reports.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Technical skills assessment</li>
+                            <li><i class="fas fa-check"></i> Tactical understanding</li>
+                            <li><i class="fas fa-check"></i> Physical metrics tracking</li>
+                            <li><i class="fas fa-check"></i> Mental attributes evaluation</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>Player Scouting</h3>
+                        <p>Find players that match specific criteria for your team's needs and playing style.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Attribute-based search</li>
+                            <li><i class="fas fa-check"></i> Playing style compatibility</li>
+                            <li><i class="fas fa-check"></i> Potential projection</li>
+                            <li><i class="fas fa-check"></i> Cost-value analysis</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <h3>Development Plans</h3>
+                        <p>Create personalized training programs based on individual player needs and goals.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Skill gap analysis</li>
+                            <li><i class="fas fa-check"></i> Custom drill creation</li>
+                            <li><i class="fas fa-check"></i> Progress milestones</li>
+                            <li><i class="fas fa-check"></i> Video feedback integration</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h3>Team Fit Analysis</h3>
+                        <p>Evaluate how new or existing players fit into your team's tactical system.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Role suitability</li>
+                            <li><i class="fas fa-check"></i> Chemistry prediction</li>
+                            <li><i class="fas fa-check"></i> System adaptation</li>
+                            <li><i class="fas fa-check"></i> Development pathway</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: Reports & Visualizations -->
+        <div class="features-content" id="reports-content">
+            <div class="feature-section">
+                <div class="section-header">
+                    <h2>Professional Reports & Visualizations</h2>
+                    <p>Create coach-friendly reports with interactive visualizations that make complex data easy to understand</p>
+                </div>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <h3>Custom Report Builder</h3>
+                        <p>Generate professional reports in multiple formats with your team's branding.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> PDF, PowerPoint, Word export</li>
+                            <li><i class="fas fa-check"></i> Custom templates</li>
+                            <li><i class="fas fa-check"></i> Branding options</li>
+                            <li><i class="fas fa-check"></i> Automated generation</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Interactive Dashboards</h3>
+                        <p>Visualize data with interactive charts, graphs, and tactical boards.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Real-time data updates</li>
+                            <li><i class="fas fa-check"></i> Filter and drill-down</li>
+                            <li><i class="fas fa-check"></i> Custom chart creation</li>
+                            <li><i class="fas fa-check"></i> Export visualizations</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h3>Video Analysis Tools</h3>
+                        <p>Integrate video clips with data analysis for comprehensive match reviews.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Video tagging</li>
+                            <li><i class="fas fa-check"></i> Clip creation</li>
+                            <li><i class="fas fa-check"></i> Drawing tools</li>
+                            <li><i class="fas fa-check"></i> Voiceover recording</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                        <h3>Sharing & Collaboration</h3>
+                        <p>Share insights with your coaching staff, players, and management seamlessly.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Team collaboration</li>
+                            <li><i class="fas fa-check"></i> Secure sharing</li>
+                            <li><i class="fas fa-check"></i> Comment system</li>
+                            <li><i class="fas fa-check"></i> Version control</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 4: Coach Workflow -->
+        <div class="features-content" id="workflow-content">
+            <div class="feature-section">
+                <div class="section-header">
+                    <h2>Coach Workflow Tools</h2>
+                    <p>Streamline your coaching workflow with tools designed for football professionals</p>
+                </div>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                        <h3>Data Import</h3>
+                        <p>Easily import data from various sources in multiple formats.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> CSV/Excel files</li>
+                            <li><i class="fas fa-check"></i> Video upload</li>
+                            <li><i class="fas fa-check"></i> API integration</li>
+                            <li><i class="fas fa-check"></i> Manual data entry</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3>Team Database</h3>
+                        <p>Organize all your analysis in a searchable database.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Advanced search</li>
+                            <li><i class="fas fa-check"></i> Filter and sort</li>
+                            <li><i class="fas fa-check"></i> Tag system</li>
+                            <li><i class="fas fa-check"></i> Quick access</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h3>Comparison Tool</h3>
+                        <p>Compare teams side-by-side to identify key differences and advantages.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Head-to-head analysis</li>
+                            <li><i class="fas fa-check"></i> Style comparison</li>
+                            <li><i class="fas fa-check"></i> Player matchups</li>
+                            <li><i class="fas fa-check"></i> Tactical advantages</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3>Mobile Access</h3>
+                        <p>Access your analysis anywhere with our mobile-friendly platform.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Responsive design</li>
+                            <li><i class="fas fa-check"></i> Mobile app</li>
+                            <li><i class="fas fa-check"></i> Offline access</li>
+                            <li><i class="fas fa-check"></i> Push notifications</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo Section -->
+        <div class="demo-section">
+            <h2>See It in Action</h2>
+            <p>Watch how FootIntel Pro transforms raw match data into actionable tactical insights</p>
+            
+            <div class="demo-preview">
+                <i class="fas fa-play-circle"></i>
+                <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">Interactive Platform Demo</h3>
+                <p>Click play to see how coaches use our platform to analyze teams and create game plans</p>
+                <button class="btn btn-primary" style="margin-top: 1.5rem;" onclick="playDemo()">
+                    <i class="fas fa-play"></i> Watch Demo
+                </button>
+            </div>
+        </div>
+
+        <!-- Use Cases -->
+        <div class="use-cases">
+            <div class="section-header">
+                <h2>Who Uses FootIntel Pro</h2>
+                <p>Trusted by football professionals at every level</p>
+            </div>
+            
+            <div class="use-case-grid">
+                <div class="use-case-card">
+                    <div class="use-case-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Youth Academies</h3>
+                    <p>Develop young talents with data-driven insights and personalized development plans.</p>
+                </div>
+                
+                <div class="use-case-card">
+                    <div class="use-case-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>Semi-Pro Clubs</h3>
+                    <p>Gain competitive advantages with professional analysis tools on a limited budget.</p>
+                </div>
+                
+                <div class="use-case-card">
+                    <div class="use-case-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Professional Scouts</h3>
+                    <p>Identify talent and evaluate players with comprehensive data analysis.</p>
+                </div>
+                
+                <div class="use-case-card">
+                    <div class="use-case-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h3>Coaching Staff</h3>
+                    <p>Prepare for matches with detailed opponent analysis and tactical recommendations.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <h2>Ready to Transform Your Analysis?</h2>
+            <p>Join hundreds of coaches who use FootIntel Pro to gain data-driven insights and win more matches.</p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="signup.html" class="btn" style="background-color: white; color: var(--primary-blue);">
+                    Start 14-Day Free Trial
+                </a>
+                <a href="contact.html" class="btn" style="background-color: transparent; border: 2px solid white;">
+                    Schedule a Demo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>FootIntel Pro</h3>
+                    <p>Professional football intelligence platform that turns match data into winning strategies.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Product</h3>
+                    <ul class="footer-links">
+                        <li><a href="features.html">Features</a></li>
+                        <li><a href="pricing.html">Pricing</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="#">Updates</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="help.html">Help Center</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Case Studies</a></li>
+                        <li><a href="#">Webinars</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Partners</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2024 FootIntel Pro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching functionality
+            const featureTabs = document.querySelectorAll('.feature-tab');
+            const featureContents = document.querySelectorAll('.features-content');
+            
+            featureTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs and contents
+                    featureTabs.forEach(t => t.classList.remove('active'));
+                    featureContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Show corresponding content
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-content`).classList.add('active');
+                    
+                    // Scroll to top of features
+                    document.querySelector('.feature-section').scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                });
+            });
+            
+            // Feature card animations
+            const featureCards = document.querySelectorAll('.feature-card');
+            featureCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px)';
+                    this.style.boxShadow = '0 20px 40px rgba(0,0,0,0.1)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 4px 6px rgba(0,0,0,0.05)';
+                });
+            });
+            
+            // Use case card animations
+            const useCaseCards = document.querySelectorAll('.use-case-card');
+            useCaseCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    const icon = this.querySelector('.use-case-icon');
+                    icon.style.transform = 'scale(1.1)';
+                    icon.style.transition = 'transform 0.3s';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    const icon = this.querySelector('.use-case-icon');
+                    icon.style.transform = 'scale(1)';
+                });
+            });
+        });
+        
+        function playDemo() {
+            // In a real application, this would play a video demo
+            // For now, we'll show a modal or alert
+            const demoPreview = document.querySelector('.demo-preview');
+            const originalContent = demoPreview.innerHTML;
+            
+            demoPreview.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <i class="fas fa-video" style="font-size: 3rem; color: var(--football-green); margin-bottom: 1rem;"></i>
+                    <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">Demo Video Playing</h3>
+                    <p style="color: var(--medium-gray); margin-bottom: 1.5rem;">
+                        In production, this would play an interactive demo video showing the platform features.
+                    </p>
+                    <div style="display: flex; justify-content: center; gap: 1rem;">
+                        <button class="btn" onclick="stopDemo()">
+                            <i class="fas fa-stop"></i> Stop
+                        </button>
+                        <button class="btn btn-primary" onclick="window.open('https://www.youtube.com/watch?v=demo', '_blank')">
+                            <i class="fab fa-youtube"></i> Watch on YouTube
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function stopDemo() {
+            const demoPreview = document.querySelector('.demo-preview');
+            demoPreview.innerHTML = `
+                <i class="fas fa-play-circle"></i>
+                <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">Interactive Platform Demo</h3>
+                <p>Click play to see how coaches use our platform to analyze teams and create game plans</p>
+                <button class="btn btn-primary" style="margin-top: 1.5rem;" onclick="playDemo()">
+                    <i class="fas fa-play"></i> Watch Demo
+                </button>
+            `;
+        }
+    </script>
+</body>
+</html>
